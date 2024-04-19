@@ -90,7 +90,7 @@ public class City extends GameEntity {
      * @return True if the purchase was successful, false otherwise.
      */
 	public void buy(int price, int acres) throws InsufficientResourcesException{
-		if(this.acres == 0)
+		if(acres == 0)
 			return;
 		if(price * acres > this.depot.getTotalFillLevel())
 			throw new InsufficientResourcesException("Insufficient resources to buy " + acres + " acres.", price * acres, this.depot.getTotalFillLevel());
