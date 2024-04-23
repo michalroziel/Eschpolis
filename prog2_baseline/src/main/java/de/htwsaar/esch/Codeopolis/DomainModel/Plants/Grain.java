@@ -4,7 +4,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Plants;
  * The `Grain` class represents an abstract grain plant with common attributes and behaviors.
  * Subclasses of `Grain` define specific types of grain plants.
  */
-public abstract class Grain {
+public abstract class 	Grain {
 	
 	public enum Pests{FritFly, DeliaFly, BarleyGoutFly};
 	

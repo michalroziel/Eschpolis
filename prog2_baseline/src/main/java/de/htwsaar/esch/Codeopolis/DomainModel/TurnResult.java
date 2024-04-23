@@ -11,7 +11,7 @@ public class TurnResult {
 	private int year; //The year of the city
 	private int newResidents; // Number of new residents in the city after the turn
 	private int[] bushelsHarvested; // Amount of bushels harvested during the turn
-	private int residents; // Current number of residents in the city
+	private int residents; // Current number of residents in^ the city
 	private int[] bushels; // Current number of bushels in the city
 	private int starved; // Number of residents who starved during the turn
 	private int acres; // Current number of acres owned by the city
