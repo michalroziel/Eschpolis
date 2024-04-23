@@ -11,7 +11,22 @@ public class Conditions {
 	private float soilConditions;
 	private float averageTemperatureSummer;
 	private float averageTemperatureWinter;
-	
+
+	private boolean drought;
+
+
+	private boolean fusarium;
+
+	private boolean leafDrought;
+
+	private  boolean powderyMildew;
+
+	private  boolean barleyGoOutFly;
+
+	private  boolean deliaFly;
+	private boolean fritFly;
+
+
 	/**
      * Constructs a new `Conditions` object with specified values for soil conditions and temperatures.
      *
@@ -19,12 +34,19 @@ public class Conditions {
      * @param averageTemperatureSummer The average summer temperature (in degrees Celsius).
      * @param averageTemperatureWinter The average winter temperature (in degrees Celsius).
      */
-	public Conditions(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter ) {
+	public Conditions(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, boolean drought, boolean fusarium, boolean leafDrought, boolean powderyMildew, boolean barleyGoOutFly, boolean deliaFly, boolean fritFly) {
 		this.soilConditions = soilConditions;
 		this.averageTemperatureSummer = averageTemperatureSummer;
 		this.averageTemperatureWinter = averageTemperatureWinter;
+		this.drought = drought;
+		this.fusarium = fusarium;
+		this.leafDrought = leafDrought;
+		this.powderyMildew = powderyMildew;
+		this.barleyGoOutFly = barleyGoOutFly;
+		this.deliaFly = deliaFly;
+		this.fritFly = fritFly;
 	}
-	
+
     /**
      * Gets the soil conditions affecting plant growth.
      *
@@ -62,6 +84,46 @@ public class Conditions {
 		float soilConditions = random.nextFloat(); // generates a random float value between 0.0 (inclusive) and 1.0 (exclusive)
 		float averageTemperatureSummer = random.nextFloat() * 30.0f; // generates a random float value between 0.0 (inclusive) and 30.0 (exclusive)
 		float averageTemperatureWinter = random.nextFloat() * 20.0f - 10.0f; // generates a random float value between -10.0 (inclusive) and 10.0 (exclusive)
-		return new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+
+		boolean drought = random.nextFloat() > 0.8 ? true : false;
+		boolean fusarium = random.nextFloat() > 0.8 ? true : false;
+		boolean leafDrought = random.nextFloat() > 0.8 ? true : false;
+		boolean powderyMildew = random.nextFloat() > 0.8 ? true : false;
+		boolean barleyGoutFly = random.nextFloat() > 0.8 ? true : false;
+		boolean deliaFly = random.nextFloat() > 0.8 ? true : false;
+		boolean fritFly = random.nextFloat() > 0.8 ? true : false;
+
+
+		return new Conditions(soilConditions,averageTemperatureSummer,averageTemperatureWinter,drought,fusarium,
+				leafDrought,powderyMildew,barleyGoutFly,deliaFly,fritFly);
+
+	}
+
+	public boolean isDrought() {
+		return drought;
+	}
+
+	public boolean isFusarium() {
+		return fusarium;
+	}
+
+	public boolean isLeafDrought() {
+		return leafDrought;
+	}
+
+	public boolean isPowderyMildew() {
+		return powderyMildew;
+	}
+
+	public boolean isBarleyGoOutFly() {
+		return barleyGoOutFly;
+	}
+
+	public boolean isDeliaFly() {
+		return deliaFly;
+	}
+
+	public boolean isFritFly() {
+		return fritFly;
 	}
 }

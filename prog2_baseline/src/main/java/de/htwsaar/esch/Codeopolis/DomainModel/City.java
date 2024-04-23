@@ -76,7 +76,7 @@ public class City extends GameEntity {
      * This method delegates the expansion operation to the underlying Depot object.
      *
      * @param additionalCapacity The additional capacity to be added to the depot.
-     * @see Depot#expand(int)
+     * @see Depotexpand(int)
      */
     public void expandDepot(int numberOfSilos, int capacityPerSilo) {
     	this.depot.expand(numberOfSilos, capacityPerSilo);
@@ -250,31 +250,23 @@ public class City extends GameEntity {
 		//Calculation of the harvest:
 		int[] harvested = new int[Game.GrainType.values().length];
 		Conditions thisYearsConditions = Conditions.generateRandomConditions();
-
-		boolean drought = this.fortune.nextFloat() > 0.8 ? true : false;
-		boolean fusarium = this.fortune.nextFloat() > 0.8 ? true : false;
-		boolean leafDrought = this.fortune.nextFloat() > 0.8 ? true : false;
-		boolean powderyMildew = this.fortune.nextFloat() > 0.8 ? true : false;
-		boolean barleyGoutFly = this.fortune.nextFloat() > 0.8 ? true : false;
-		boolean deliaFly = this.fortune.nextFloat() > 0.8 ? true : false;
-		boolean fritFly = this.fortune.nextFloat() > 0.8 ? true : false;
 		
 		for(int i = 0; i< Game.GrainType.values().length; i++) {
 			if(this.planted[i] != null) {
 				this.planted[i].grow(thisYearsConditions);
-				if(drought)
+				if(thisYearsConditions.isDrought())
 					this.planted[i].drought();
-				if(fusarium)
+				if(thisYearsConditions.isFusarium())
 					this.planted[i].diseaseOutbreak(Grain.Diseases.Fusarium, thisYearsConditions);
-				if(leafDrought)
+				if(thisYearsConditions.isLeafDrought())
 					this.planted[i].diseaseOutbreak(Grain.Diseases.LeafDrought, thisYearsConditions);
-				if(powderyMildew)
+				if(thisYearsConditions.isPowderyMildew())
 					this.planted[i].diseaseOutbreak(Grain.Diseases.PowderyMildew, thisYearsConditions);
-				if(barleyGoutFly)
+				if(thisYearsConditions.isBarleyGoOutFly())
 					this.planted[i].pestInfestation(Grain.Pests.BarleyGoutFly, thisYearsConditions);
-				if(deliaFly)
+				if(thisYearsConditions.isDeliaFly())
 					this.planted[i].pestInfestation(Grain.Pests.DeliaFly, thisYearsConditions);
-				if(fritFly)
+				if(thisYearsConditions.isFritFly())
 					this.planted[i].pestInfestation(Grain.Pests.FritFly, thisYearsConditions);
 				harvested[i] = this.planted[i].harvest();	
 			}
