@@ -97,7 +97,7 @@ public class Game extends GameEntity{
      */
 	public void startGame() {
 		this.state = GameState.RUNNING;
-		while(this.state != GameState.GAMEOVER)
+		//while(this.state != GameState.GAMEOVER)
 			gameLoop();
 	}
 	
@@ -105,6 +105,12 @@ public class Game extends GameEntity{
      * Executes a single iteration of the game loop.
      */
 	private void gameLoop() {
+
+		if (this.state == GameState.GAMEOVER){
+			return ;
+		}
+
+
 		expandDepot();
 		buy();
 		sell();
@@ -124,6 +130,8 @@ public class Game extends GameEntity{
 			ui.gameWon("Congratulations, you have led the citizens of your city through "+this.config.getNumberOfYears()+" tough years. You will forever be revered as a hero of the city. A statue of you is be erected in the center of "+this.city.getState().getName()+". ");
 			this.state = GameState.GAMEOVER;
 		}
+
+		gameLoop();
 	}
 	
 	/**

@@ -232,7 +232,7 @@ public class City extends GameEntity {
      */
 	public TurnResult runTurn() {
 		//Calculate how many inhabitants of the city starved to death:
-		int peopleStarved = this.residents- this.fed/this.config.getBushelsPerResident();
+		int peopleStarved = this.residents - this.fed/this.config.getBushelsPerResident();
 		if(peopleStarved < 0)
 			peopleStarved = 0;
 		int peopleStarvedPercentage = (peopleStarved*100) / this.residents;
@@ -250,7 +250,7 @@ public class City extends GameEntity {
 		//Calculation of the harvest:
 		int[] harvested = new int[Game.GrainType.values().length];
 		Conditions thisYearsConditions = Conditions.generateRandomConditions();
-		
+
 		for(int i = 0; i< Game.GrainType.values().length; i++) {
 			if(this.planted[i] != null) {
 				this.planted[i].grow(thisYearsConditions);

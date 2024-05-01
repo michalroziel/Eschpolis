@@ -22,7 +22,7 @@ public class GrainTests {
     public void testCorn(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
         Corn corn = new Corn();
-        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without planting and growing. 
         int crop = corn.harvest();
@@ -134,7 +134,7 @@ public class GrainTests {
     public void testMillet(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Millet millet = new Millet();
-        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without planting and growing. 
         int crop = millet.harvest();
@@ -248,7 +248,7 @@ public class GrainTests {
     public void testWheat(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Wheat wheat = new Wheat();
-        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without planting and growing. 
         int crop = wheat.harvest();
@@ -361,7 +361,7 @@ public class GrainTests {
     public void testRice(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Rice rice = new Rice();
-        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without planting and growing. 
         int crop = rice.harvest();
@@ -474,7 +474,7 @@ public class GrainTests {
     public void testRye(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Rye rye = new Rye();
-        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without growing. 
         int crop = rye.harvest();
@@ -587,7 +587,7 @@ public class GrainTests {
     public void testBarley(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Barley barley = new Barley();
-        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Conditions conditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without growing. 
         int crop = barley.harvest();

@@ -25,7 +25,7 @@ public class Depot {
      *
      * @param silosArray The array of Silo objects to be copied into the depot.
      */
-    public Depot(Silo[] silosArray) {
+    public Depot(Silo[] silosArray) {   // probably used when a Game is loaded
         if (silosArray == null) {
             this.silos = new Silo[0];
         } else {
