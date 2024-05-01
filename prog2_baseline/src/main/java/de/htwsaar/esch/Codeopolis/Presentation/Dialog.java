@@ -221,27 +221,47 @@ public class Dialog extends UserInterface{
      * @return The positive integer entered by the user.
      */
 	private int readPositivIntegerInput() {
-		int result = -1;
-		String line;
-		while(result < 0) {
-			try {
-				line = input.next();
-				result = Integer.parseInt(line);
-				if(result < 0)
-					System.out.println("You entered a negative integer. Please try again.");
-			}
-			catch(NumberFormatException e) {
-				System.out.println("Error – Please enter an integer value");
-			}
-			catch(NoSuchElementException e) {
-				System.out.println(e);
-			}
-			catch(IllegalStateException e) {
-				System.out.println(e);
-			}
-		}
-		return result;
+
+
+		return recReadPosInt();
 	}
+
+		private int recReadPosInt(){
+
+			int result = -1;
+			String line;
+
+				try {
+					line = input.next();
+					result = Integer.parseInt(line);
+
+					if(result < 0){
+						System.out.println("You entered a negative integer. Please try again.");
+						return recReadPosInt();
+					}
+
+					return result;
+
+					}
+
+					//TODO: are the catch cases even reached ? 
+
+				catch(NumberFormatException e) {
+					System.out.println("Error – Please enter an integer value");
+					return recReadPosInt();
+				}
+				catch(NoSuchElementException e) {
+					System.out.println(e);
+					return recReadPosInt();
+				}
+				catch(IllegalStateException e) {
+					System.out.println(e);
+					return recReadPosInt();
+				}
+			
+
+		}
+
 	
 	@Override
 	public int buy(int pricePerAcre, CityState cityState) {
