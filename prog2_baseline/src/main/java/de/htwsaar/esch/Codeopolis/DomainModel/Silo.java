@@ -16,7 +16,7 @@ public class Silo implements Serializable{
     /**
      * Constructs a Silo object with the specified initial capacity.
      *
-     * @param initialCapacity The initial capacity of the silo.
+     * @param c apacity The initial capacity of the silo.
      */
     public Silo(int capacity) {
         this.capacity = capacity;
