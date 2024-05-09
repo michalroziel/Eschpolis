@@ -94,7 +94,7 @@ public class Depot {
         }
     }
 
-    // public method to create an Iterator Object outside of the Depot class
+    // public method to create an Iterator Object outside of the Depot class,
     public Iterator createIterator(Game.GrainType grainType) {
         return new DepotIterator(grainType);
     }
