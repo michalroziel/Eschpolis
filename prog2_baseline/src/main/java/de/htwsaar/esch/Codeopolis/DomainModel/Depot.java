@@ -94,7 +94,7 @@ public class Depot {
         }
     }
 
-    // public method to create an Iterator Object outside of the Depot class,
+    // public method to create an Iterator Object outside the Depot class,
     public Iterator createIterator(Game.GrainType grainType) {
         return new DepotIterator(grainType);
     }
@@ -108,12 +108,15 @@ public class Depot {
      */
     public int getFillLevel(Game.GrainType grainType) {
         int totalFillLevel = 0;
-        for (Silo silo : silos) {
-            if (silo.getGrainType() == grainType) {
-                totalFillLevel += silo.getFillLevel();
-            }
+        Iterator iterator = new DepotIterator(grainType);
+
+        // Add the fill level as long as there is another silo with the correct GrainType
+        while (iterator.hasNext()) {
+            Silo.Status currStatus = iterator.next();
+            totalFillLevel += currStatus.getFillLevel();
         }
         return totalFillLevel;
+
     }
 
     /**
@@ -155,12 +158,17 @@ public class Depot {
      */
     public int getCapacity(Game.GrainType grainType) {
         int totalCapacity = 0;
-        for (Silo silo : silos) {
-            if (silo.getGrainType() == grainType || silo.getGrainType() == null) {
-                totalCapacity += silo.getCapacity();
-            }
+        Iterator iterator = new DepotIterator(grainType);
+
+
+        // Add the capacity as long as there is another silo with the correct GrainType
+        while (iterator.hasNext()) {
+            Silo.Status currStatus = iterator.next();
+            totalCapacity += currStatus.getCapacity();
         }
+
         return totalCapacity;
+
     }
 
     /**

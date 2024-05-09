@@ -59,6 +59,16 @@ public class Silo implements Serializable{
         //TODO: which other constructors are needed ? Factory method ?
 
 
+        // Getter for the capacity of the silo
+        public int getCapacity(){
+            return capacity;
+        }
+
+        // Getter for the fill level of the silo
+        public int getFillLevel(){
+            return fillLevel;
+        }
+
     }
 
     // Getter for the status of the silo
