@@ -64,17 +64,13 @@ public class Depot {
         //TODO: does it make sense to set it to 0 ?
         int currentIndex = 0;
 
-
         private DepotIterator(Game.GrainType grainTypeToIterate) {
-
             iteratorGrainType = grainTypeToIterate;
-
         }
 
         @Override
         public boolean hasNext() {
             if ((silos[currentIndex++] != null) && silos[currentIndex++].getGrainType() == iteratorGrainType) {
-
                 return true;
             }
             return false;
@@ -82,20 +78,25 @@ public class Depot {
 
         @Override
         public Silo.Status next() {
-
+            // if the next Silo is available and has the same GrainType
             if (hasNext()) {
 
                 // getting the Silo with the next Index as there is another
                 Silo mySilo = new Silo(silos[currentIndex++]);
 
                 //TODO: return new Silo status
-                return new Silo.Status();
+                return mySilo.getStatus();
 
             } else {
 
                 throw new NoSuchElementException("No next element there!");
             }
         }
+    }
+
+    // public method to create an Iterator Object outside of the Depot class
+    public Iterator createIterator(Game.GrainType grainType) {
+        return new DepotIterator(grainType);
     }
 
 
@@ -323,8 +324,7 @@ public class Depot {
      * @return {@code true} if the total fill level of all silos equals or exceeds the total capacity of the storage system, {@code false} otherwise.
      */
     public boolean full() {
-        if (this.getTotalFillLevel() >= this.totalCapacity())
-            return true;
+        if (this.getTotalFillLevel() >= this.totalCapacity()) return true;
         return false;
     }
 
@@ -370,10 +370,8 @@ public class Depot {
 
             String grainName;
 
-            if (silos[i].getGrainType() != null)
-                grainName = silos[i].getGrainType().toString();
-            else
-                grainName = "EMPTY";
+            if (silos[i].getGrainType() != null) grainName = silos[i].getGrainType().toString();
+            else grainName = "EMPTY";
 
             builder.append(grainName).append("\n");
 

@@ -43,6 +43,29 @@ public class Silo implements Serializable{
         }
     }
 
+    // final declaration to make the Status class immutable
+    public final class Status{
+
+        // Status saves the capacity and fill level of the silo.
+        private int capacity;
+        private int fillLevel;
+
+        // private constructor to only allow the Silo class to create a Status object
+        private Status(int capacity, int fillLevel){
+            this.capacity = capacity;
+            this.fillLevel = fillLevel;
+        }
+
+        //TODO: which other constructors are needed ? Factory method ?
+
+
+    }
+
+    // Getter for the status of the silo
+    public Status getStatus(){
+        return new Status(capacity, fillLevel);
+    }
+
     /**
      * Stores a harvest in the silo if there is available capacity.
      *
