@@ -370,46 +370,81 @@ public class Depot {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("");
-        DecimalFormat df = new DecimalFormat("0.00");
 
-        for (int i = 0; i < silos.length; i++) {
-            builder.append("Silo ").append(i + 1).append(": ");
+        class DepotVisualizer {
 
-            String grainName;
+            private String appendSiloInfo(Silo silo) {
 
-            if (silos[i].getGrainType() != null) grainName = silos[i].getGrainType().toString();
-            else grainName = "EMPTY";
+                StringBuilder builder = new StringBuilder("");
+                DecimalFormat df = new DecimalFormat("0.00");
 
-            builder.append(grainName).append("\n");
+                builder.append("Silo ").append(i + 1).append(": ");
 
-            int fillLevel = silos[i].getFillLevel();
-            int capacity = silos[i].getCapacity();
+                String grainName;
 
-            double fillPercentage = (double) fillLevel / capacity * 100;
-            double emptyPercentage = 100 - fillPercentage;
+                if (silo.getGrainType() != null) grainName = silo.getGrainType().toString();
+                else grainName = "EMPTY";
 
-            // Absolute amount of grain
-            builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
+                builder.append(grainName).append("\n");
 
-            // ASCI-ART representation of the fill level
-            int fillBarLength = 20;
-            int filledBars = (int) (fillPercentage / 100 * fillBarLength);
-            int emptyBars = fillBarLength - filledBars;
+                int fillLevel = silo.getFillLevel();
+                int capacity = silo.getCapacity();
 
-            builder.append("|");
-            for (int j = 0; j < filledBars; j++) {
-                builder.append("=");
+                double fillPercentage = (double) fillLevel / capacity * 100;
+                double emptyPercentage = 100 - fillPercentage;
+
+                // Absolute amount of grain
+                builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
+
+                // ASCI-ART representation of the fill level
+                int fillBarLength = 20;
+                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
+                int emptyBars = fillBarLength - filledBars;
+
+                builder.append("|");
+                for (int j = 0; j < filledBars; j++) {
+                    builder.append("=");
+                }
+                for (int j = 0; j < emptyBars; j++) {
+                    builder.append("-");
+                }
+                builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
+
+                builder.append("Capacity: ").append(capacity).append(" units\n\n");
+
+                return builder.toString();
+
             }
-            for (int j = 0; j < emptyBars; j++) {
-                builder.append("-");
-            }
-            builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
 
-            builder.append("Capacity: ").append(capacity).append(" units\n\n");
+            private String visualize(){
+
+                StringBuilder builder = new StringBuilder("");
+
+                for (Silo silo : silos) {
+
+                    builder.append(appendSiloInfo(silo));
+
+                }
+
+                return builder.toString();
+
+
+            }
+
+
+
         }
 
-        return builder.toString();
+        DepotVisualizer result = new DepotVisualizer();
+
+        for (Silo silo : silos) {
+
+            result.appendSiloInfo(silo);
+
+        }
+
+        return result.visualize();
+
     }
 
 }
