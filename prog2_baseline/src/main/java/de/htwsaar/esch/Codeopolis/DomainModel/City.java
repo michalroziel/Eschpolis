@@ -6,6 +6,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Plants.*;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
+import java.util.Random;
 
 /**
  * Represents a city in Codeopolis
@@ -143,7 +144,67 @@ public class City extends GameEntity {
      * @param acres The number of acres to plant.
      * @return True if the planting was successful, false otherwise.
      */
+
+
+
+	// method to
+	public boolean checkTenPercentProbability() {
+		Random random = new Random();
+		int randomValue = random.nextInt(100);  // Generates a random integer between 0 and 99
+		return randomValue < 10;  // Returns true for values 0-9, which is 10% of the time
+
+    }
+
+
 	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
+
+		// anonymous class to implement secret
+		WinterGrain anonymousAlkis = new WinterGrain(12f, 0.4f, 0.1f) {
+			@Override
+			public void drought() {
+				this.yieldRatio *= 0.5;
+			}
+
+			@Override
+			public void pestInfestation(Pests pest, Conditions conditions) {
+
+				switch(pest) {
+					case FritFly:
+						this.yieldRatio *= 0.75f;
+						break;
+					case BarleyGoutFly:
+						this.yieldRatio *= 0.7f;
+						break;
+					default:
+						break;
+				}
+
+			}
+
+			@Override
+			public void diseaseOutbreak(Diseases disease, Conditions conditions) {
+				switch (disease) {
+					case PowderyMildew:
+						this.yieldRatio *= 0.7f;
+						break;
+					case LeafDrought:
+						if(conditions.getAverageTemperatureWinter() > this.getOPTIMAL_WINTER_TEMPERATURE() + 2f) {
+							this.yieldRatio *= 0.6f;
+						}
+						else {
+							this.yieldRatio *= 0.7;
+						}
+						break;
+					default:
+						break;
+				}
+
+
+			}
+		};
+
+
+
 		int acresSum = 0;
 		for (GrainType grainType : GrainType.values()) {
 	        int i = grainType.ordinal();
@@ -151,16 +212,16 @@ public class City extends GameEntity {
 			if(acres[i] * this.config.getBushelsPerAcre() > this.depot.getFillLevel(grainType))
 				throw new InsufficientResourcesException(
 		                "Not enough bushels to plant " + acres[i] + " acres of grain type " + grainType,
-		                acres[i] * this.config.getBushelsPerAcre(), 
+		                acres[i] * this.config.getBushelsPerAcre(),
 		                this.depot.getFillLevel(grainType)
 		            );
 		}
-		if(acresSum > this.acres) 
+		if(acresSum > this.acres)
 			throw new LandOperationException(
 		            "Attempting to plant " + acresSum + " acres, but only " + this.acres + " acres are available."
 		        );
 
-		if(acresSum > this.config.getAcrePerResident() * this.residents) 
+		if(acresSum > this.config.getAcrePerResident() * this.residents)
 			throw new LandOperationException(
 		            "Not enough residents to plant " + acresSum + " acres. You can plant "+this.config.getAcrePerResident()+" acres per resident."
 		        );
@@ -187,8 +248,14 @@ public class City extends GameEntity {
 	            seed = new Rye();
 	            break;
 	        case WHEAT:
-	            seed = new Wheat();
-	            break;
+				if (checkTenPercentProbability()) {
+					System.out.println("Some Magic is happening !!!!!!!");
+					seed = anonymousAlkis;
+					 break;
+				}else {
+					seed = new Wheat();
+					break;
+				}
 	        // No default case needed as we are covering all enum constants
 			}
 			if(acres[grainTypeIndex] > 0 && seed != null) {
