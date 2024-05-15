@@ -211,11 +211,11 @@ public class Silo implements Serializable{
     }
 
     // final declaration to make the Status class immutable
-    public final class Status{
+    public class Status{
 
         // Status saves the capacity and fill level of the silo.
-        private int capacity;
-        private int fillLevel;
+        private final int capacity;
+        private final int fillLevel;
 
         // private constructor to only allow the Silo class to create a Status object
         private Status(int capacity, int fillLevel){

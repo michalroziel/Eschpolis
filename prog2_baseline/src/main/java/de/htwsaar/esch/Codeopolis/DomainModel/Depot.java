@@ -411,7 +411,7 @@ public class Depot {
         public boolean hasNext() {
 
             for (int i = currentIndex+1; i < silos.length ; i++) {
-                if(silos[i].getGrainType() == iteratorGrainType){
+                if(silos[i].getGrainType() == iteratorGrainType || silos[i].getFillLevel() == 0){
                     temp = i;
                     return true;
                 }

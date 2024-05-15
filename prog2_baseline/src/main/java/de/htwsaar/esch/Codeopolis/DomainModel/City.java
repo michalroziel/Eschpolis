@@ -159,49 +159,7 @@ public class City extends GameEntity {
 	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
 
 		// anonymous class to implement secret
-		WinterGrain anonymousAlkis = new WinterGrain(12f, 0.4f, 0.1f) {
-			@Override
-			public void drought() {
-				this.yieldRatio *= 0.5;
-			}
-
-			@Override
-			public void pestInfestation(Pests pest, Conditions conditions) {
-
-				switch(pest) {
-					case FritFly:
-						this.yieldRatio *= 0.75f;
-						break;
-					case BarleyGoutFly:
-						this.yieldRatio *= 0.7f;
-						break;
-					default:
-						break;
-				}
-
-			}
-
-			@Override
-			public void diseaseOutbreak(Diseases disease, Conditions conditions) {
-				switch (disease) {
-					case PowderyMildew:
-						this.yieldRatio *= 0.7f;
-						break;
-					case LeafDrought:
-						if(conditions.getAverageTemperatureWinter() > this.getOPTIMAL_WINTER_TEMPERATURE() + 2f) {
-							this.yieldRatio *= 0.6f;
-						}
-						else {
-							this.yieldRatio *= 0.7;
-						}
-						break;
-					default:
-						break;
-				}
-
-
-			}
-		};
+		
 
 
 
@@ -249,8 +207,51 @@ public class City extends GameEntity {
 	            break;
 	        case WHEAT:
 				if (checkTenPercentProbability()) {
-					System.out.println("Some Magic is happening !!!!!!!");
-					seed = anonymousAlkis;
+					System.out.println("Some Magic is happening!");
+					seed = new WinterGrain(12f, 0.4f, 0.1f) {
+						@Override
+						public void drought() {
+							this.yieldRatio *= 0.5;
+						}
+			
+						@Override
+						public void pestInfestation(Pests pest, Conditions conditions) {
+			
+							switch(pest) {
+								case FritFly:
+									this.yieldRatio *= 0.75f;
+									break;
+								case BarleyGoutFly:
+									this.yieldRatio *= 0.7f;
+									break;
+								default:
+									break;
+							}
+			
+						}
+			
+						@Override
+						public void diseaseOutbreak(Diseases disease, Conditions conditions) {
+							switch (disease) {
+								case PowderyMildew:
+									this.yieldRatio *= 0.7f;
+									break;
+								case LeafDrought:
+									if(conditions.getAverageTemperatureWinter() > this.getOPTIMAL_WINTER_TEMPERATURE() + 2f) {
+										this.yieldRatio *= 0.6f;
+									}
+									else {
+										this.yieldRatio *= 0.7;
+									}
+									break;
+								default:
+									break;
+							}
+			
+			
+						}
+					};
+
 					 break;
 				}else {
 					seed = new Wheat();
