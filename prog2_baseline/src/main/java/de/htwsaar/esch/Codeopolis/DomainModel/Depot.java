@@ -331,6 +331,66 @@ public class Depot {
      *
      * @return {@code true} if the total fill level of all silos equals or exceeds the total capacity of the storage system, {@code false} otherwise.
      */
+
+	public boolean full() {
+		if(this.getTotalFillLevel()>=this.totalCapacity())
+			return true;
+		return false;
+	}
+	
+	/**
+	 * Calculates the total capacity of the depot by summing the capacities of all silos.
+	 * 
+	 * @return The total capacity of the storage system.
+	 */
+	public int totalCapacity() {
+		int totalCapacity = 0;
+		for(int i=0; i<this.silos.length; i++) {
+			totalCapacity += this.silos[i].getCapacity();
+		}
+		return totalCapacity;
+	}
+
+	/**
+	 * Retrieves the total amount of grain categorized by grain type.
+	 * 
+	 * @return An array containing the total amount of grain for each grain type, indexed by the grain type constants defined in the {@code GameConfig} class.
+	 */
+	public int[] getBushelsCategorizedByGrainType() {
+	    int[] result = new int[Game.GrainType.values().length];
+	    for(Game.GrainType grainType : Game.GrainType.values()) {
+	        result[grainType.ordinal()] = getFillLevel(grainType);
+	    }
+	    return result;
+	}
+	
+	
+
+
+	/**
+	 * Returns a string representation of the depot, including information about each silo's grain type, fill level, capacity, and absolute amount of grain.
+	 *
+	 * @return A string containing information about the depot, including each silo's grain type, fill level, capacity, and absolute amount of grain.
+	 */
+    @Override
+    public String toString() {
+
+
+        // creating the local class
+        class DepotVisualizer {
+
+            private StringBuilder builder = new StringBuilder();
+            private DecimalFormat df = new DecimalFormat("0.00");
+
+            private int index = 0 ;
+
+            // adding information to a silo
+            public void appendSiloInfo(Silo silo) {
+
+                builder.append("Silo ").append(index + 1).append(": ");
+
+                String grainName = (silo.getGrainType() != null) ? silo.getGrainType().toString() : "EMPTY";
+
     public boolean full() {
         if (this.getTotalFillLevel() >= this.totalCapacity()) return true;
         return false;
@@ -385,12 +445,120 @@ public class Depot {
                 if (silo.getGrainType() != null) grainName = silo.getGrainType().toString();
                 else grainName = "EMPTY";
 
+
                 builder.append(grainName).append("\n");
 
                 int fillLevel = silo.getFillLevel();
                 int capacity = silo.getCapacity();
 
                 double fillPercentage = (double) fillLevel / capacity * 100;
+
+                int fillBarLength = 20;
+
+                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
+                int emptyBars = fillBarLength - filledBars;
+
+                builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
+                builder.append("|");
+
+                for (int j = 0; j < filledBars; j++) {
+                    builder.append("=");
+                }
+
+                for (int j = 0; j < emptyBars; j++) {
+                    builder.append("-");
+                }
+
+                builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
+                builder.append("Capacity: ").append(capacity).append(" units\n\n");
+
+                index++;
+            }
+
+            // make a visual representation of the Depot
+            public String visualize() {
+                //simply return a string representation of the builder
+                return builder.toString();
+            }
+        }
+
+
+        //From exercise sheet 3
+        DepotVisualizer result = new DepotVisualizer();
+
+        //iteratively append information to silo
+        for (int i = 0; i < silos.length; i++) {
+
+            result.appendSiloInfo(silos[i]);
+        }
+
+
+
+        // Rückgabe der String-Repräsentation des Depots
+        return result.visualize();
+    }
+
+
+    public interface Iterator {
+        /**
+         * Checks if there are further objects available for iteration.
+         *
+         * @return {@code true} if more objects are available; {@code false} otherwise.
+         */
+        boolean hasNext();
+        /**
+         * Returns the next {@link Silo.Status} object in the iteration.
+         * This method should only be called if {@code hasNext()} returns {@code true}.
+         *
+         * @return The next {@link Silo.Status} object.
+         * @throws NoSuchElementException if no more elements are available.
+         */
+        Silo.Status next();
+    }
+
+    private class DepotIterator implements Iterator {
+
+        private Game.GrainType iteratorGrainType;
+
+        //TODO: does it make sense to set it to 0 ?
+        private int currentIndex = -1;
+        private int temp;
+
+        private DepotIterator(Game.GrainType grainTypeToIterate) {
+            iteratorGrainType = grainTypeToIterate;
+        }
+
+        @Override
+        public boolean hasNext() {
+
+            for (int i = currentIndex+1; i < silos.length ; i++) {
+                if(silos[i].getGrainType() == iteratorGrainType || silos[i].getFillLevel() == 0){
+                    temp = i;
+                    return true;
+                }
+            }
+                return false;
+        }
+
+        @Override
+        public Silo.Status next() {
+            // if the next Silo is available and has the same GrainType
+            //TODO: do we really need the if case?
+            if (hasNext()) {
+                //TODO: return new Silo status
+                currentIndex = temp;
+                return silos[currentIndex].getStatus();
+            } else {
+                throw new NoSuchElementException("No next element there!");
+            }
+        }
+    }
+    // public method to create an Iterator Object outside the Depot class,
+    public Iterator createIterator(Game.GrainType grainType) {
+        return new DepotIterator(grainType);
+    }
+
+=======
                 double emptyPercentage = 100 - fillPercentage;
 
                 // Absolute amount of grain
@@ -447,5 +615,6 @@ public class Depot {
         return result.visualize();
 
     }
+
 
 }

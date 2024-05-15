@@ -49,6 +49,9 @@ public class DepotTest {
         takenOut = depot.takeOut(400, Game.GrainType.CORN);
         assertEquals(400, takenOut);
         assertEquals(0, depot.getFillLevel(Game.GrainType.CORN));
+
+        depot.toString();
+
     }
 
     @Test
