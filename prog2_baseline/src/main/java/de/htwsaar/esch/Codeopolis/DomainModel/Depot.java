@@ -401,7 +401,7 @@ public class Depot {
 
         //TODO: does it make sense to set it to 0 ?
         private int currentIndex = -1;
-        private int temu;
+        private int temp;
 
         private DepotIterator(Game.GrainType grainTypeToIterate) {
             iteratorGrainType = grainTypeToIterate;
@@ -412,7 +412,7 @@ public class Depot {
 
             for (int i = currentIndex+1; i < silos.length ; i++) {
                 if(silos[i].getGrainType() == iteratorGrainType){
-                    temu = i;
+                    temp = i;
                     return true;
                 }
             }
@@ -425,11 +425,9 @@ public class Depot {
             //TODO: do we really need the if case?
             if (hasNext()) {
                 //TODO: return new Silo status
-                currentIndex = temu;
+                currentIndex = temp;
                 return silos[currentIndex].getStatus();
-
             } else {
-
                 throw new NoSuchElementException("No next element there!");
             }
         }
