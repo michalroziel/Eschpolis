@@ -587,7 +587,10 @@ public class GrainTests {
     public void testBarley(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Barley barley = new Barley();
+
         Grain.Conditions  conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
+
+        Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, false, false, false, false, false, false, false);
         
         //test harvesting without growing. 
         int crop = barley.harvest();

@@ -16,7 +16,7 @@ public class Silo implements Serializable{
     /**
      * Constructs a Silo object with the specified initial capacity.
      *
-     * @param initialCapacity The initial capacity of the silo.
+     * @param c apacity The initial capacity of the silo.
      */
     public Silo(int capacity) {
         this.capacity = capacity;
@@ -41,6 +41,39 @@ public class Silo implements Serializable{
         for (int i = 0; i <= other.stockIndex; i++) {
             this.stock[i] = other.stock[i].copy();
         }
+    }
+
+    // final declaration to make the Status class immutable
+    public final class Status{
+
+        // Status saves the capacity and fill level of the silo.
+        private int capacity;
+        private int fillLevel;
+
+        // private constructor to only allow the Silo class to create a Status object
+        private Status(int capacity, int fillLevel){
+            this.capacity = capacity;
+            this.fillLevel = fillLevel;
+        }
+
+        //TODO: which other constructors are needed ? Factory method ?
+
+
+        // Getter for the capacity of the silo
+        public int getCapacity(){
+            return capacity;
+        }
+
+        // Getter for the fill level of the silo
+        public int getFillLevel(){
+            return fillLevel;
+        }
+
+    }
+
+    // Getter for the status of the silo
+    public Status getStatus(){
+        return new Status(capacity, fillLevel);
     }
 
     /**
