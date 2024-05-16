@@ -5,8 +5,8 @@ import java.util.Random;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Plants.*;
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Depot;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
-import java.util.Random;
 
 /**
  * Represents a city in Codeopolis

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import de.htwsaar.esch.Codeopolis.DomainModel.Depot;
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Depot;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 

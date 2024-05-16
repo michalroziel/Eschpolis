@@ -1,6 +1,6 @@
-package de.htwsaar.esch.Codeopolis.DomainModel;
+package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
-import java.util.Arrays;
+import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import java.io.Serializable;
 

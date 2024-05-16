@@ -1,5 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
+
 import java.io.Serializable;
 import java.util.Arrays;
 

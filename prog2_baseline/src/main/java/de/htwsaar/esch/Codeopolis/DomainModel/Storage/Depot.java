@@ -1,6 +1,9 @@
-package de.htwsaar.esch.Codeopolis.DomainModel;
+package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Game;
+import de.htwsaar.esch.Codeopolis.DomainModel.GameConfig;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
+
 import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
 
