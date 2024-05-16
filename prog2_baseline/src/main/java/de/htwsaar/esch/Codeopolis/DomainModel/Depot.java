@@ -89,7 +89,7 @@ public class Depot {
     
     /**
      * Retrieves the capacity of the depot for a specific grain type.
-     *
+     * TEsting
      * @param grainType The grain type for which to retrieve the capacity.
      * @return The total capacity of the depot for the specified grain type.
      */
@@ -399,7 +399,7 @@ public class Depot {
 
         private Game.GrainType iteratorGrainType;
 
-        //TODO: does it make sense to set it to 0 ?
+        //TODO: does it make sense to set it to -1 ?
         private int currentIndex = -1;
         private int temp;
 
