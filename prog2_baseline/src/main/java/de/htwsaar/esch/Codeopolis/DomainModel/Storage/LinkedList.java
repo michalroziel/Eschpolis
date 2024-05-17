@@ -168,4 +168,8 @@ public class LinkedList<T> {
         return count;
     }
 
+    public LinkedIterator makeIterator(){
+        return new LinkedIterator(this.head);
+    }
+
 }
