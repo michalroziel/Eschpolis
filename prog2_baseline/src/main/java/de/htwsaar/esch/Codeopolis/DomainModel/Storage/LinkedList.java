@@ -1,35 +1,79 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
-import org.w3c.dom.Node;
+import java.util.NoSuchElementException;
 
-public class LinkedList <T> {
+public class LinkedList<T> {
     // First Elm. of the List
     private Node<T> head;
     private int size;
 
-    // Innerclass Node
-    public static class Node<T>{
+    // Inner class Node
+    public static class Node<T> {
         T content;
         Node<T> next;
-        public Node(T content){
+
+        public Node(T content) {
             this.content = content;
             this.next = null;
         }
     }
 
+    public interface Iterator<T> {
+        /**
+         * Checks if there are further objects available for iteration.
+         *
+         * @return {@code true} if more objects are available; {@code false} otherwise.
+         */
+        boolean hasNext();
+
+        /**
+         * Returns the next {@link Silo.Status} object in the iteration.
+         * This method should only be called if {@code hasNext()} returns {@code true}.
+         *
+         * @return The next {@link Silo.Status} object.
+         * @throws NoSuchElementException if no more elements are available.
+         */
+        T next();
+    }
+
+    private class LinkedIterator implements Iterator {
+        private Node<T> current;
+
+
+        private LinkedIterator(Node<T> head) {
+            this.current = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current.next != null;
+        }
+
+        @Override
+        public T next() {
+            if (hasNext()) {
+                T content = current.content;
+                current = current.next;
+                return content;
+            } else {
+                throw new NoSuchElementException("No next element there!");
+            }
+        }
+    }
+
     //Constructor initialize with empty list head = null
-    public LinkedList(){
+    public LinkedList() {
         this.head = null;
         this.size = 0;
     }
 
-    public void addLast(T content){
+    public void addLast(T content) {
         Node<T> node = new Node<>(content);
-        if(this.head == null){
+        if (this.head == null) {
             this.head = node;
-        }else {
+        } else {
             Node<T> temp = this.head;
-            while(temp.next != null ){
+            while (temp.next != null) {
                 temp = temp.next;
             }
             temp.next = node;
@@ -37,88 +81,89 @@ public class LinkedList <T> {
         size++;
     }
 
-    public void removeFirst(){
-        if(this.head != null){
+    public void removeFirst() {
+        if (this.head != null) {
             this.head = this.head.next;
             size--;
         }
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return this.head == null;
     }
 
-    public int size(){
+    public int size() {
         return this.size;
     }
 
-    public T get (int index){
-        if(index < 0 || index >= this.size){
+    public T get(int index) {
+        if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
-        }else {
+        } else {
             Node<T> temp = this.head;
             for (int i = 0; i < index; i++) {
-                temp= temp.next;
+                temp = temp.next;
             }
             return temp.content;
         }
     }
 
-    public T set(T content,int index){
-        if(index < 0 || index >= this.size){
+    public T set(T content, int index) {
+        if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
-        }else {
-
-            //TODO checken ob es funktioniert
-            //idee ist: wen wir 2 ersetzten wollen gehen wir bis 1 speichen uns den content von 2 ab. +
-            //Dann erstellen wir einen neuen Knoten der anstelle von 2 sein wird.
-            //Darauf sagen wir den neuen Knoten das next = zwei weiter von 1 ist also 3.
-            // Nun müssen wir nur noch 1 sagen, dass newNode der next Knoten ist.
-            // Es folgt 1 NewNode 3 als Rheinfolge.
-            Node<T> temp = this.head;
-            for (int i = 0; i < index-1; i++) {
-                temp= temp.next;
+        } else {
+            if(index == 0){
+                T result = head.content;
+                head.content= content;
+                return result;
             }
-            T result = temp.next.content;
-            Node<T> newNode = new Node<>(content);
-            newNode.next = temp.next.next;
-            temp.next = newNode;
+            Node<T> temp = this.head;
+            for (int i = 0; i < index ; i++) {
+                temp = temp.next;
+            }
+            T result = temp.content;
+            temp.content = content;
             return result;
         }
     }
 
-    public void clear(){
+    public void clear() {
         this.head = null;
     }
 
-    public T remove(int index){
-        if(index < 0 || index >= this.size){
+    public T remove(int index) {
+        if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
-        }else {
-
-            //TODO checken ob es funktioniert vielleicht ist case beim head remove krittisch
+        } else {
+            if(index == 0){
+                T result = head.content;
+                size--;
+                head = head.next;
+                return result;
+            }
             Node<T> temp = this.head;
-            for (int i = 0; i < index-1; i++) {
-                temp= temp.next;
+            for (int i = 0; i < index - 1; i++) {
+                temp = temp.next;
             }
             T result = temp.next.content;
             temp.next = temp.next.next;
+            this.size--;
             return result;
         }
     }
 
-    public int test(){
+    public int test() {
         int count = 0;
-        if (isEmpty()){
+        if (isEmpty()) {
             return count;
         }
         Node<T> temp = head;
-        while (true){
-            if (temp.next == null){
+        while (true) {
+            if (temp.next == null) {
                 break;
             }
             temp = temp.next;
-            count ++;
+            count++;
         }
         return count;
     }
