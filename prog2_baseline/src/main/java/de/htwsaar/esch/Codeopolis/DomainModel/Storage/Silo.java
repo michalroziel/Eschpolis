@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The Silo class represents a storage unit for a specific type of grain.
  */
 public class Silo implements Serializable{
-    private Harvest[] stock;
+    private LinkedList<Harvest> stock;
     private final int capacity;
     private int fillLevel;
     private int stockIndex = -1;
@@ -16,11 +16,11 @@ public class Silo implements Serializable{
     /**
      * Constructs a Silo object with the specified initial capacity.
      *
-     * @param initialCapacity The initial capacity of the silo.
+     * @param capacity The initial capacity of the silo.
      */
     public Silo(int capacity) {
         this.capacity = capacity;
-        this.stock = new Harvest[10];
+        this.stock = new LinkedList<>();
         this.fillLevel = 0;
     }
     
@@ -36,11 +36,7 @@ public class Silo implements Serializable{
         this.capacity = other.capacity;
         this.fillLevel = other.fillLevel;
         this.stockIndex = other.stockIndex;
-
-        this.stock = new Harvest[other.stock.length];
-        for (int i = 0; i <= other.stockIndex; i++) {
-            this.stock[i] = other.stock[i].copy();
-        }
+        LinkedIterator iter = LinkedList.makeIterator(other.stock);
     }
 
     /**
