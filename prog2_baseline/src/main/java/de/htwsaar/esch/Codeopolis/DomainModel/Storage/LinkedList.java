@@ -152,22 +152,6 @@ public class LinkedList<T> {
         }
     }
 
-    public int test() {
-        int count = 0;
-        if (isEmpty()) {
-            return count;
-        }
-        Node<T> temp = head;
-        while (true) {
-            if (temp.next == null) {
-                break;
-            }
-            temp = temp.next;
-            count++;
-        }
-        return count;
-    }
-
     public LinkedIterator makeIterator(){
         return new LinkedIterator(this.head);
     }
