@@ -36,7 +36,11 @@ public class Silo implements Serializable{
         this.capacity = other.capacity;
         this.fillLevel = other.fillLevel;
         this.stockIndex = other.stockIndex;
-        LinkedIterator iter = LinkedList.makeIterator(other.stock);
+        this.stock = new LinkedList<>();
+        LinkedList<Harvest>.LinkedIterator iter = other.stock.makeIterator();
+        while(iter.hasNext()) {
+            stock.addLast(iter.next());
+        }
     }
 
     /**
@@ -46,8 +50,9 @@ public class Silo implements Serializable{
      * @return The amount of grain that could not be stored due to capacity limitations.
      */
     public Harvest store(Harvest harvest) {
+        LinkedList.LinkedIterator iter = stock.makeIterator();
     	 // Check if the grain type matches the existing grain in the silo
-        if (fillLevel > 0 && stock[0].getGrainType() != harvest.getGrainType()) {
+        if (fillLevel > 0 && iter.getGrainType() != harvest.getGrainType()) {
             throw new IllegalArgumentException("The grain type of the given Harvest does not match the grain type of the silo");
         }
         

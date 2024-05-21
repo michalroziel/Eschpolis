@@ -36,7 +36,7 @@ public class LinkedList<T> {
         T next();
     }
 
-    private class LinkedIterator implements Iterator {
+    class LinkedIterator implements Iterator {
         private Node<T> current;
 
 
