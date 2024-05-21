@@ -46,17 +46,20 @@ public class LinkedList<T> {
 
         @Override
         public boolean hasNext() {
+            if (current == null) {
+                return false;
+            }
             return current.next != null;
         }
 
         @Override
         public T next() {
-            if (hasNext()) {
+            if (hasNext() || current.content != null) {
                 T content = current.content;
                 current = current.next;
                 return content;
             } else {
-                throw new NoSuchElementException("No next element there!");
+                return null;
             }
         }
     }

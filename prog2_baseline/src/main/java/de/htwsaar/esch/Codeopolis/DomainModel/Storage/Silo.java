@@ -130,8 +130,11 @@ public class Silo implements Serializable{
         int takenAmount = 0;
         LinkedList<Harvest>.LinkedIterator iter = this.stock.makeIterator();
         int i = 0;
-        while (iter.hasNext() && amount > 0) {
+        while ( amount > 0) {
             Harvest harvest = iter.next();
+            if (harvest == null){
+                break;
+            }
             int taken = harvest.remove(amount);
             amount -= taken;
             takenAmount += taken;
