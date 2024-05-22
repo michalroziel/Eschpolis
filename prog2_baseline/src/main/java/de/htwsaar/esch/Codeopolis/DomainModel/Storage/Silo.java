@@ -54,7 +54,8 @@ public class Silo implements Serializable{
         this.capacity = other.capacity;
         this.fillLevel = other.fillLevel;
         this.stockIndex = other.stockIndex;
-        LinkedList<Harvest>.LinkedIterator iter = other.stock.makeIterator();
+        this.stock = new LinkedList<>();
+        LinkedList<Harvest>.LinkedIterator<Harvest> iter = other.stock.makeIterator();
         while(iter.hasNext()){
             this.stock.addLast(iter.next());
         }
@@ -102,16 +103,17 @@ public class Silo implements Serializable{
      * @return An array containing all the removed harvests from the silo.
      *         If the silo is empty, an empty array is returned.
      */
-    public Harvest[] emptySilo() {
+    public LinkedList<Harvest> emptySilo() {
         if (this.stock.isEmpty()) {
             return null;
         }
         else {
-            Harvest[] removedHarvests = new Harvest[this.stock.size()];
-            LinkedList<Harvest>.LinkedIterator iter = this.stock.makeIterator();
+            LinkedList<Harvest> removedHarvests = new LinkedList<Harvest>();
+
+            LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
             int i = 0;
             while (iter.hasNext()) {
-                removedHarvests[i++] = iter.next();
+                removedHarvests.addLast(iter.next());
             }
             this.stock.clear();
             stockIndex = -1;
@@ -128,23 +130,19 @@ public class Silo implements Serializable{
      */
     public int takeOut(int amount) {
         int takenAmount = 0;
-        LinkedList<Harvest>.LinkedIterator iter = this.stock.makeIterator();
-        int i = 0;
-        while ( amount > 0) {
+        LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
+        int index = 0;
+
+        while (iter.hasNext() && amount > 0) {
             Harvest harvest = iter.next();
-            if (harvest == null){
-                break;
-            }
             int taken = harvest.remove(amount);
             amount -= taken;
             takenAmount += taken;
 
             if (harvest.getAmount() <= 0) {
-                this.stock.remove(i);
-                stockIndex--;
+                iter.remove();  // Use iterator's remove method to safely remove elements
             } else {
-                this.stock.set(harvest, i);
-                i++;
+                index++;  // Increment index only if not removing
             }
         }
 
@@ -202,7 +200,7 @@ public class Silo implements Serializable{
      */
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
-        LinkedList<Harvest>.LinkedIterator iter = this.stock.makeIterator();
+        LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
         while (iter.hasNext()) {
             Harvest currentHarvest = iter.next();
             totalDecayedAmount += currentHarvest.decay(currentYear);

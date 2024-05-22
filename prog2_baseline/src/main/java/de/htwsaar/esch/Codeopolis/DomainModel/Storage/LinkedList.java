@@ -34,35 +34,59 @@ public class LinkedList<T> {
          * @throws NoSuchElementException if no more elements are available.
          */
         T next();
+
+        void remove();
+
     }
 
-    class LinkedIterator implements Iterator {
+    public class LinkedIterator<T> implements Iterator{
         private Node<T> current;
+        private Node<T> previous;
+        private Node<T> beforePrevious; // Keeps track of the node before 'previous' to update the link when removing
 
-
-        private LinkedIterator(Node<T> head) {
+        public LinkedIterator(Node<T> head) {
             this.current = head;
+            this.previous = null;
+            this.beforePrevious = null;
         }
 
         @Override
         public boolean hasNext() {
-            if (current == null) {
-                return false;
-            }
-            return current.next != null;
+            return current != null;
         }
 
         @Override
         public T next() {
-            if (hasNext() || current.content != null) {
-                T content = current.content;
-                current = current.next;
-                return content;
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            // Move the pointers forward
+            T content = current.content;
+            beforePrevious = previous;
+            previous = current;
+            current = current.next;
+            return content;
+        }
+
+        @Override
+        public void remove() {
+            if (previous == null) {
+                throw new IllegalStateException("next() has not been called or remove() already called after the last next()");
+            }
+
+            if (beforePrevious == null) {
+                // If `previous` was the first node
+                // Update the head of the list to skip the removed node
+                previous = null; // Reset previous to avoid illegal state on subsequent calls
             } else {
-                return null;
+                // Update the link to skip the removed node
+                beforePrevious.next = current;
+                previous = null; // Reset previous to avoid illegal state on subsequent calls
             }
         }
     }
+
 
     //Constructor initialize with empty list head = null
     public LinkedList() {
@@ -115,13 +139,13 @@ public class LinkedList<T> {
         if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
         } else {
-            if(index == 0){
+            if (index == 0) {
                 T result = head.content;
-                head.content= content;
+                head.content = content;
                 return result;
             }
             Node<T> temp = this.head;
-            for (int i = 0; i < index ; i++) {
+            for (int i = 0; i < index; i++) {
                 temp = temp.next;
             }
             T result = temp.content;
@@ -138,7 +162,7 @@ public class LinkedList<T> {
         if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
         } else {
-            if(index == 0){
+            if (index == 0) {
                 T result = head.content;
                 size--;
                 head = head.next;
@@ -155,7 +179,7 @@ public class LinkedList<T> {
         }
     }
 
-    public LinkedIterator makeIterator(){
+    public LinkedIterator makeIterator() {
         return new LinkedIterator(this.head);
     }
 
