@@ -14,8 +14,16 @@ public class Silo implements Serializable,Comparable<Silo> {
     private int stockIndex = -1;
 
     @Override
-    public int compareTo(Silo o) {
-        return 0;
+    public int compareTo(Silo otherSilo) {
+
+        if (this.fillLevel > otherSilo.fillLevel) {
+            return 1;
+        } else if (this.fillLevel < otherSilo.fillLevel) {
+            return -1;
+        } else {
+            return 0;
+        }
+
     }
 
     public class Status {
