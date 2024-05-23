@@ -156,7 +156,7 @@ public class City extends GameEntity {
     }
 
 
-	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
+	public void  plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
 
 		// anonymous class to implement secret
 		

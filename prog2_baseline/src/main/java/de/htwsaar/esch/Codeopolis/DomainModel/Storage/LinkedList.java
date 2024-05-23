@@ -2,7 +2,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
 import java.util.NoSuchElementException;
 
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable> {
     // First Elm. of the List
     private Node<T> head;
     private int size;
