@@ -188,6 +188,7 @@ public class LinkedList<T extends Comparable> {
      * @param a array to be sorted
      * @return sorted array
      */
+
     static int[] bubbleSort(int[] a) {
         // sorted area a[i] ... a[n-1]
         for (int i = a.length; i > 0; i--) {
