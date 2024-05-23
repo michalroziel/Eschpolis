@@ -10,7 +10,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
  * The Harvest class represents the annual harvest, containing information
  * about the amount of grain harvested and the year in which it occurred.
  */
-public abstract class Harvest implements Serializable{
+public abstract class Harvest implements Serializable,Comparable<Harvest>{
     private int bushels;
     private int year;
 
