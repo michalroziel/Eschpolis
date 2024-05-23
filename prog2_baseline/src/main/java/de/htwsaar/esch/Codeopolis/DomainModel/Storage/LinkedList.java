@@ -179,6 +179,32 @@ public class LinkedList<T extends Comparable> {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //////////// BubbleSort ////////////////////////////////////////////////////
+    ////////////
+    /**
+     * BubbleSort (Sorting through swapping elements)
+     *
+     * @param a array to be sorted
+     * @return sorted array
+     */
+    static int[] bubbleSort(int[] a) {
+        // sorted area a[i] ... a[n-1]
+        for (int i = a.length; i > 0; i--) {
+            // unsorted area a[0] ... a[i-1]
+            for (int j = 0; j < i - 1; j++) {
+                // swap a[j] and a[j+1] if a[j] > a[j+1] (ascending order)
+                if (a[j] > a[j + 1]) {
+                    // swap a[j] and a[j+1]
+                    int t = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = t;
+                }
+            }
+        }
+        return a;
+    }
+
     public LinkedIterator makeIterator() {
         return new LinkedIterator(this.head);
     }
