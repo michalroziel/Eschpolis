@@ -242,7 +242,7 @@ public class Depot {
      * @param capacityPerSilo The capacity per silo.
      */
     public void expand(int numberOfSilos, int capacityPerSilo) {
-        for (int i = silos.size()-1; i < silos.size()+numberOfSilos; i++) {
+        for (int i = 0; i < numberOfSilos; i++) {
             silos.addLast(new Silo(capacityPerSilo));
         }
         this.takeOut((int) (numberOfSilos * GameConfig.DEPOT_EXPANSION_COST)); //#Issue42
@@ -395,7 +395,7 @@ public class Depot {
             }
         }
 
-
+        silos.sort();
         //From exercise sheet 3
         DepotVisualizer result = new DepotVisualizer();
 
