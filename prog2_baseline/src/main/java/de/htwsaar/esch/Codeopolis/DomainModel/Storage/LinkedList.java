@@ -209,6 +209,45 @@ public class LinkedList<T extends Comparable> {
     public LinkedIterator makeIterator() {
         return new LinkedIterator(this.head);
     }
+    public void sort() {
+        if (size > 1) {
+            boolean wasChanged;
+
+            do {
+                Node<T> current = head;
+                Node<T> previous = null;
+                Node<T> next = current.next;
+                wasChanged = false;
+
+                while (next != null) {
+                    if (current.content.compareTo(next.content) > 0) {
+                        wasChanged = true;
+
+                        if (previous != null) {
+                            Node<T> sig = next.next;
+
+                            previous.next = next;
+                            next.next = current;
+                            current.next = sig;
+                        } else {
+                            Node<T> sig = next.next;
+
+                            head = next;
+                            next.next = current;
+                            current.next = sig;
+                        }
+
+                        previous = next;
+                        next = current.next;
+                    } else {
+                        previous = current;
+                        current = next;
+                        next = next.next;
+                    }
+                }
+            } while (wasChanged);
+        }
+    }
 
 
 }
