@@ -5,8 +5,8 @@ import java.util.Random;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Plants.*;
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Depot;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
-import java.util.Random;
 
 /**
  * Represents a city in Codeopolis
@@ -156,7 +156,7 @@ public class City extends GameEntity {
     }
 
 
-	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
+	public void  plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
 
 		// anonymous class to implement secret
 		
