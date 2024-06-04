@@ -1,6 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 public class LinkedList<T extends Comparable> {
     // First Elm. of the List
@@ -209,6 +210,7 @@ public class LinkedList<T extends Comparable> {
     public LinkedIterator makeIterator() {
         return new LinkedIterator(this.head);
     }
+
     public void sort() {
         if (size > 1) {
             boolean wasChanged;
@@ -250,6 +252,27 @@ public class LinkedList<T extends Comparable> {
             } while (wasChanged);
         }
     }
+
+    public LinkedList filter(Predicate<T> predicate){
+
+        // create a new list to save elements that have been filtered
+        LinkedList myList = new LinkedList();
+
+        // create an iterator to iterate over the list
+        LinkedIterator<T> iterator = makeIterator();
+        // while not reached the end
+        while (iterator.hasNext()) {
+            // get the next element as type T
+            T content = iterator.next();
+            // check if the predicate returns true
+            if (predicate.test(content)) {
+                // add element to the list
+                myList.addLast(content);
+            }
+        }
+
+        return myList;
+    };
 
 
 }
