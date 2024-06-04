@@ -220,6 +220,8 @@ public class LinkedList<T extends Comparable> {
                 wasChanged = false;
 
                 while (next != null) {
+
+                    // compare if coompareTo yields 1 which means that the current is greater than the next
                     if (current.content.compareTo(next.content) > 0) {
                         wasChanged = true;
 
