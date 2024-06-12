@@ -1,6 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class LinkedList<T extends Comparable> {
@@ -40,7 +41,7 @@ public class LinkedList<T extends Comparable> {
 
     }
 
-    public class LinkedIterator<T> implements Iterator{
+    public class LinkedIterator<T> implements Iterator {
         private Node<T> current;
         private Node<T> previous;
         private Node<T> beforePrevious; // Keeps track of the node before 'previous' to update the link when removing
@@ -183,6 +184,7 @@ public class LinkedList<T extends Comparable> {
     ////////////////////////////////////////////////////////////////////////////
     //////////// BubbleSort ////////////////////////////////////////////////////
     ////////////
+
     /**
      * BubbleSort (Sorting through swapping elements)
      *
@@ -253,13 +255,13 @@ public class LinkedList<T extends Comparable> {
         }
     }
 
-    public LinkedList filter(Predicate<T> predicate){
+    public LinkedList<T> filter(Predicate<? super T> predicate) {
 
         // create a new list to save elements that have been filtered
-        LinkedList myList = new LinkedList();
+        LinkedList<T> afterFilterList = new LinkedList<T>();
 
         // create an iterator to iterate over the list
-        LinkedIterator<T> iterator = makeIterator();
+        LinkedIterator<T> iterator = this.makeIterator();
         // while not reached the end
         while (iterator.hasNext()) {
             // get the next element as type T
@@ -267,12 +269,33 @@ public class LinkedList<T extends Comparable> {
             // check if the predicate returns true
             if (predicate.test(content)) {
                 // add element to the list
-                myList.addLast(content);
+                afterFilterList.addLast(content);
             }
         }
 
-        return myList;
-    };
+        return afterFilterList;
+    }
+
+
+    public void forEach(Consumer<? super T> consumer) {
+
+        // create a new LinkedList to be able to
+        // LinkedList listToConsume = new LinkedList();
+
+        // create an iterator to be able to cycle through all the elements and apply the consumer
+        LinkedIterator<T> consumerIterator = this.makeIterator();
+
+        while (consumerIterator.hasNext()) {
+
+            // set content to represent the current element
+            T content = consumerIterator.next();
+
+            //perform the given operation on the element
+            consumer.accept(content);
+
+        }
+
+    }
 
 
 }
