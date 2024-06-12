@@ -297,5 +297,22 @@ public class LinkedList<T extends Comparable> {
 
     }
 
+    public void removeIf(Predicate<? super T > predicate){
+
+        LinkedIterator<T> myIterator = this.makeIterator();
+
+        while (myIterator.hasNext()){
+
+            T content = myIterator.next();
+
+            if (predicate.test(content)) myIterator.remove();
+
+        }
+
+    }
+
+
+
+
 
 }
