@@ -297,11 +297,11 @@ public class LinkedList<T extends Comparable> {
 
     }
 
-    public void removeIf(Predicate<? super T > predicate){
+    public void removeIf(Predicate<? super T> predicate) {
 
         LinkedIterator<T> myIterator = this.makeIterator();
 
-        while (myIterator.hasNext()){
+        while (myIterator.hasNext()) {
 
             T content = myIterator.next();
 
@@ -311,8 +311,14 @@ public class LinkedList<T extends Comparable> {
 
     }
 
+    public void addIf(Predicate<? super T> predicate, T newElement) {
 
+        if (predicate.test(newElement)) {
 
+            this.addLast(newElement);
+
+        }
+    }
 
 
 }
