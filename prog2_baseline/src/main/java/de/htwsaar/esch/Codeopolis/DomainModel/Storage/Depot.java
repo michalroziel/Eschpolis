@@ -6,6 +6,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.Harvest;
 
 import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 public class Depot {
     private LinkedList<Silo> silos;
@@ -132,12 +133,26 @@ public class Depot {
 
         while (iter.hasNext()) {
             Silo currSilo = iter.next();
-            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
+
+            Harvest finalHarvest = harvest;
+            Predicate<Harvest> pred = silo -> silo.getGrainType() == finalHarvest.getGrainType() || silo.getAmount() == 0;
+
+            // store if it satisfies the predicate ?
+            if ( pred.test(harvest)) {
                 harvest = currSilo.store(harvest);
                 if (harvest == null) {
                     return true;
                 }
             }
+
+//            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
+//                harvest = currSilo.store(harvest);
+//                if (harvest == null) {
+//                    return true;
+//                }
+//            }
+
+
         }
 
 
@@ -258,7 +273,7 @@ public class Depot {
         while (iter.hasNext()) {
             Silo silo = iter.next();
             LinkedList<Harvest> siloHarvests = silo.emptySilo();
-            if(siloHarvests != null) {
+            if (siloHarvests != null) {
 
                 LinkedList<Harvest>.LinkedIterator<Harvest> harvestIter = siloHarvests.makeIterator();
                 while (harvestIter.hasNext()) {
@@ -266,7 +281,7 @@ public class Depot {
                 }
             }
         }
-        }
+    }
 
 
     /**
@@ -277,7 +292,7 @@ public class Depot {
     private int getTotalHarvestCount() {
         int totalCount = 0;
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             totalCount += iter.next().getHarvestCount();
         }
         return totalCount;
@@ -292,7 +307,7 @@ public class Depot {
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             totalDecayedAmount += iter.next().decay(currentYear);
         }
         return totalDecayedAmount;
@@ -317,7 +332,7 @@ public class Depot {
     public int totalCapacity() {
         int totalCapacity = 0;
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-        while (iter.hasNext()){
+        while (iter.hasNext()) {
             totalCapacity += iter.next().getCapacity();
         }
         return totalCapacity;
