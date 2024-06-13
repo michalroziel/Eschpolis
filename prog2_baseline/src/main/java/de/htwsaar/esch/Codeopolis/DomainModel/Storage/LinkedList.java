@@ -1,5 +1,6 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -318,6 +319,57 @@ public class LinkedList<T extends Comparable> {
             this.addLast(newElement);
 
         }
+    }
+
+    public void sort(Comparator<? super T> comparator) {
+
+        if (size > 1) {
+            boolean wasChanged;
+
+            do {
+                Node<T> current = head;
+                Node<T> previous = null;
+                Node<T> next = current.next;
+                wasChanged = false;
+
+                while (next != null) {
+
+                    // compare if coompareTo yields 1 which means that the current is greater than the next
+
+                    // if (current.content.compareTo(next.content) > 0) {
+
+
+                    // TODO: now using the comparator !
+                    if (comparator.compare(current.content, next.content) > 0) {
+
+                        wasChanged = true;
+
+                        if (previous != null) {
+                            Node<T> sig = next.next;
+
+                            previous.next = next;
+                            next.next = current;
+                            current.next = sig;
+                        } else {
+                            Node<T> sig = next.next;
+
+                            head = next;
+                            next.next = current;
+                            current.next = sig;
+                        }
+
+                        previous = next;
+                        next = current.next;
+                    } else {
+                        previous = current;
+                        current = next;
+                        next = next.next;
+                    }
+                }
+            } while (wasChanged);
+        }
+
+
     }
 
 
