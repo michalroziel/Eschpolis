@@ -311,7 +311,14 @@ public class LinkedList<T extends Comparable> {
         }
 
     }
-
+    /**
+     * This method adds a new element to the end of the LinkedList if it satisfies a given condition.
+     * The condition is specified by a Predicate, which is a functional interface that represents a boolean-valued function of one argument.
+     * The method tests the new element with the Predicate, and if the Predicate returns true, the element is added to the LinkedList.
+     *
+     * @param predicate The condition that the new element must satisfy in order to be added to the LinkedList.
+     * @param newElement The new element to be added to the LinkedList.
+     */
     public void addIf(Predicate<? super T> predicate, T newElement) {
 
         if (predicate.test(newElement)) {

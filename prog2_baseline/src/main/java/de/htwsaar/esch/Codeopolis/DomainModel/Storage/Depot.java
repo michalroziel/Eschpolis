@@ -32,13 +32,22 @@ public class Depot {
      */
     public Depot(LinkedList<Silo> silosList) {   // probably used when a Game is loaded
         this.silos = new LinkedList<>();
-        if (silosList == null) {
-        } else {
-            LinkedList<Silo>.LinkedIterator<Silo> iter = silosList.makeIterator();
-            while (iter.hasNext()) {
-                this.silos.addLast(iter.next());
-            }
+
+        LinkedList<Silo>.LinkedIterator<Silo> iter = silosList.makeIterator();
+
+        Predicate<Silo> myPredicate = (Silo mySilo) -> mySilo != null;
+
+        while (iter.hasNext()) {
+            silosList.addIf(myPredicate, iter.next());
         }
+
+//        if (silosList == null) {
+//        } else {
+//            LinkedList<Silo>.LinkedIterator<Silo> iter = silosList.makeIterator();
+//            while (iter.hasNext()) {
+//                this.silos.addLast(iter.next());
+//            }
+//        }
     }
 
     /**
@@ -68,17 +77,11 @@ public class Depot {
      */
     public LinkedList<Silo> getSilos() {
         // Create a new array of Silo with the same length as the original
+        Predicate<Silo> mypred = (Silo mySilo) -> mySilo != null;
 
-        LinkedList<Silo> silosCopy = new LinkedList<>();
-
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silosCopy.makeIterator();
-
-        while (iter.hasNext()) {
-            Silo currSilo = iter.next();
-            silosCopy.addLast(currSilo);
-        }
-
+        LinkedList<Silo> silosCopy = silos.filter(mypred);
         return silosCopy;
+
     }
 
     /**
@@ -130,21 +133,20 @@ public class Depot {
     public boolean store(Harvest harvest) {
 
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
+        Harvest currHarvest = harvest;
+        Harvest finalCurrHarvest = currHarvest;
+        Predicate<Silo> pred = (Silo silo) -> silo.getGrainType() == finalCurrHarvest.getGrainType() || silo.getFillLevel() == 0;
 
         while (iter.hasNext()) {
             Silo currSilo = iter.next();
 
-            Harvest finalHarvest = harvest;
-            Predicate<Harvest> pred = silo -> silo.getGrainType() == finalHarvest.getGrainType() || silo.getAmount() == 0;
-
-            // store if it satisfies the predicate ?
-            if ( pred.test(harvest)) {
-                harvest = currSilo.store(harvest);
-                if (harvest == null) {
+            // if the predicate is satisfied
+            if (pred.test(currSilo)) {
+                currHarvest = currSilo.store(currHarvest);
+                if (currHarvest == null) {
                     return true;
                 }
             }
-
 //            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
 //                harvest = currSilo.store(harvest);
 //                if (harvest == null) {
@@ -152,24 +154,29 @@ public class Depot {
 //                }
 //            }
 
-
         }
-
 
         defragment();
 
-        LinkedList<Silo>.LinkedIterator<Silo> iter2 = silos.makeIterator();
+        iter = silos.makeIterator();
 
-        while (iter2.hasNext()) {
-
-
-            Silo currSilo = iter2.next();
-            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
-                harvest = currSilo.store(harvest);
-                if (harvest == null) {
+        while (iter.hasNext()) {
+            Silo currSilo = iter.next();
+            // check if predicate is satisfied
+            if (pred.test(currSilo)) {
+                currHarvest = currSilo.store(currHarvest);
+                if (currHarvest == null) {
                     return true;
                 }
+
             }
+//            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
+//                harvest = currSilo.store(harvest);
+//                if (harvest == null) {
+//                    return true;
+//                }
+//            }
+
         }
 
         return false;
@@ -185,15 +192,18 @@ public class Depot {
     public int takeOut(int amount, Game.GrainType grainType) {
         int takenAmount = 0;
 
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
+        Predicate<Silo> pred = silo -> silo.getGrainType() == grainType;
+        LinkedList<Silo> silosFilter = silos.filter(pred);
+        LinkedList<Silo>.LinkedIterator<Silo> iter = silosFilter.makeIterator();
+
 
         while (iter.hasNext() && amount > 0) {
             Silo currSilo = iter.next();
-            if (currSilo.getGrainType() == grainType) {
-                int taken = currSilo.takeOut(amount);
-                amount -= taken;
-                takenAmount += taken;
-            }
+
+            int taken = currSilo.takeOut(amount);
+            amount -= taken;
+            takenAmount += taken;
+
         }
 
         return takenAmount;
@@ -214,11 +224,12 @@ public class Depot {
 
             LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
 
-            while (iter.hasNext()) {
-                Silo currSilo = iter.next();
-                currSilo.emptySilo();
-            }
-
+            // we can do this because the forEach method has a check for hasNext()
+            silos.forEach(silo -> silo.emptySilo());
+//            while (iter.hasNext()) {
+//                Silo currSilo = iter.next();
+//                currSilo.emptySilo();
+//            }
             return totalAmountOfBushels;
         }
 
@@ -227,10 +238,11 @@ public class Depot {
         int remainder = amount % this.silos.size(); // length
 
         LinkedList<Silo>.LinkedIterator<Silo> iter2 = silos.makeIterator();
+        Predicate<Silo> pred = silo -> silo.getFillLevel() < partion;
 
         while (iter2.hasNext()) {
             Silo currSilo = iter2.next();
-            if (currSilo.getFillLevel() < partion) {
+            if (pred.test(currSilo)) {
                 remainder += partion - currSilo.getFillLevel();
                 currSilo.emptySilo();
             } else {
