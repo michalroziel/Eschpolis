@@ -3,6 +3,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import java.io.Serializable;
+import java.util.function.Predicate;
 
 /**
  * The Silo class represents a storage unit for a specific type of grain.
@@ -214,10 +215,13 @@ public class Silo implements Serializable,Comparable<Silo> {
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
         LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
+        //Predicate<Harvest> pred = harvest -> harvest.decay(c);
+
         while (iter.hasNext()) {
             Harvest currentHarvest = iter.next();
             totalDecayedAmount += currentHarvest.decay(currentYear);
         }
+
         fillLevel -= totalDecayedAmount;
         return totalDecayedAmount;
     }

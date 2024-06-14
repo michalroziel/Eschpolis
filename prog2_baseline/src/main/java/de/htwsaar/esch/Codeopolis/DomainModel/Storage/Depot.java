@@ -239,6 +239,12 @@ public class Depot {
 
         LinkedList<Silo>.LinkedIterator<Silo> iter2 = silos.makeIterator();
         Predicate<Silo> pred = silo -> silo.getFillLevel() < partion;
+        Predicate<Silo> notPred = silos -> silos.getFillLevel()>= partion;
+
+        LinkedList<Silo> filterListTrue = silos.filter(pred);
+        LinkedList<Silo> filterListFalse = silos.filter(notPred);
+
+
 
         while (iter2.hasNext()) {
             Silo currSilo = iter2.next();
