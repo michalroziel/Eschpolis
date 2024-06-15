@@ -3,6 +3,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class LinkedList<T extends Comparable> {
@@ -326,6 +327,20 @@ public class LinkedList<T extends Comparable> {
             this.addLast(newElement);
 
         }
+    }
+    public double sum(Function<T,Double> givenFunction) {
+
+        LinkedIterator<T> myIterator = this.makeIterator();
+        double finalSum = 0.0;
+
+        while (myIterator.hasNext()) {
+
+            T content = myIterator.next();
+            finalSum += givenFunction.apply(content);
+
+        }
+
+        return finalSum;
     }
 
     public void sort(Comparator<? super T> comparator) {

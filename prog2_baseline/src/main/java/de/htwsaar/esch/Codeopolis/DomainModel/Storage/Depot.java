@@ -5,6 +5,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.GameConfig;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.Harvest;
 
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
@@ -239,11 +240,10 @@ public class Depot {
 
         LinkedList<Silo>.LinkedIterator<Silo> iter2 = silos.makeIterator();
         Predicate<Silo> pred = silo -> silo.getFillLevel() < partion;
-        Predicate<Silo> notPred = silos -> silos.getFillLevel()>= partion;
+        Predicate<Silo> notPred = silos -> silos.getFillLevel() >= partion;
 
         LinkedList<Silo> filterListTrue = silos.filter(pred);
         LinkedList<Silo> filterListFalse = silos.filter(notPred);
-
 
 
         while (iter2.hasNext()) {
@@ -460,6 +460,74 @@ public class Depot {
          * @throws NoSuchElementException if no more elements are available.
          */
         Silo.Status next();
+    }
+
+    public String toString(Predicate<Silo> givenPredicate, Comparator givenComparator) {
+
+
+        // creating the local class
+        class DepotVisualizer {
+
+            private StringBuilder builder = new StringBuilder();
+            private DecimalFormat df = new DecimalFormat("0.00");
+
+            private int index = 0;
+
+            // adding information to a silo
+            public void appendSiloInfo(Silo silo) {
+
+                builder.append("Silo ").append(index + 1).append(": ");
+
+                String grainName = (silo.getGrainType() != null) ? silo.getGrainType().toString() : "EMPTY";
+                builder.append(grainName).append("\n");
+
+                int fillLevel = silo.getFillLevel();
+                int capacity = silo.getCapacity();
+
+                double fillPercentage = (double) fillLevel / capacity * 100;
+                int fillBarLength = 20;
+
+                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
+                int emptyBars = fillBarLength - filledBars;
+
+                builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
+                builder.append("|");
+
+                for (int j = 0; j < filledBars; j++) {
+                    builder.append("=");
+                }
+
+                for (int j = 0; j < emptyBars; j++) {
+                    builder.append("-");
+                }
+
+                builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
+                builder.append("Capacity: ").append(capacity).append(" units\n\n");
+
+                index++;
+            }
+
+            // make a visual representation of the Depot
+            public String visualize() {
+                //simply return a string representation of the builder
+                return builder.toString();
+            }
+        }
+
+        silos.sort(givenComparator);
+        //From exercise sheet 3
+        DepotVisualizer result = new DepotVisualizer();
+
+        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
+
+        while (iter.hasNext()) {
+            Silo temp = iter.next();
+            if (givenPredicate.test(temp)) {
+                result.appendSiloInfo(temp);
+            }
+        }
+        // Rückgabe der String-Repräsentation des Depots
+        return result.visualize();
     }
 
     private class DepotIterator implements Iterator {
