@@ -118,7 +118,8 @@ public class DepotDetailsDialog {
 
         switch (choice) {
             case 1:
-                return ...
+                return
+
             case 2:
                 return ...
             case 3:

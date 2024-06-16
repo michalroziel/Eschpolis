@@ -215,7 +215,10 @@ public class Silo implements Serializable,Comparable<Silo> {
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
         LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
-        //Predicate<Harvest> pred = harvest -> harvest.decay(c);
+        //Predicate<Harvest> pred = harvest -> harvest.decay(c)
+
+        // we can do this because the forEach method has a check for hasNext()
+        stock.forEach(silo -> silo.decay(currentYear));
 
         while (iter.hasNext()) {
             Harvest currentHarvest = iter.next();

@@ -325,6 +325,9 @@ public class Depot {
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
+
+
+        // we can do this because the forEach method has a check for hasNext()
         while (iter.hasNext()) {
             totalDecayedAmount += iter.next().decay(currentYear);
         }
