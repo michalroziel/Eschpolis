@@ -123,18 +123,24 @@ public class Silo implements Serializable,Comparable<Silo> {
         }
         else {
             LinkedList<Harvest> removedHarvests = new LinkedList<Harvest>();
-
-            LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
-            int i = 0;
-            while (iter.hasNext()) {
-                removedHarvests.addLast(iter.next());
-            }
+            this.stock.forEach( (Harvest harvest)-> removedHarvests.addLast(harvest));
             this.stock.clear();
             stockIndex = -1;
             fillLevel = 0;
             return removedHarvests;
         }
     }
+    public LinkedList<Harvest> getStockCopy() {
+        if (this.stock.isEmpty()) {
+            return null;
+        }
+        else {
+            LinkedList<Harvest> copy = new LinkedList<Harvest>();
+            this.stock.forEach( (Harvest harvest)-> copy.addLast(harvest));
+            return copy;
+        }
+    }
+
 
     /**
      * Takes out a specified amount of grain from the silo.
@@ -213,18 +219,7 @@ public class Silo implements Serializable,Comparable<Silo> {
      * @return The total amount of grain that decayed in all harvests in the silo.
      */
     public int decay(int currentYear) {
-        int totalDecayedAmount = 0;
-        LinkedList<Harvest>.LinkedIterator<Harvest> iter = this.stock.makeIterator();
-        //Predicate<Harvest> pred = harvest -> harvest.decay(c)
-
-        // we can do this because the forEach method has a check for hasNext()
-        stock.forEach(silo -> silo.decay(currentYear));
-
-        while (iter.hasNext()) {
-            Harvest currentHarvest = iter.next();
-            totalDecayedAmount += currentHarvest.decay(currentYear);
-        }
-
+        int totalDecayedAmount = (int) this.stock.sum((Harvest harvest) -> (double) harvest.decay(currentYear));
         fillLevel -= totalDecayedAmount;
         return totalDecayedAmount;
     }

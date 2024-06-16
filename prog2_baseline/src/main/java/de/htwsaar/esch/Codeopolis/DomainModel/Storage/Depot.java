@@ -287,16 +287,14 @@ public class Depot {
     public void defragment() {
         LinkedList<Harvest> allHarvests = new LinkedList<>();
 
+        //this.silos.forEach(silo -> silo.emptySilo().forEach((Harvest harvest)-> allHarvests.addLast(harvest)));
+
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
         while (iter.hasNext()) {
             Silo silo = iter.next();
             LinkedList<Harvest> siloHarvests = silo.emptySilo();
             if (siloHarvests != null) {
-
-                LinkedList<Harvest>.LinkedIterator<Harvest> harvestIter = siloHarvests.makeIterator();
-                while (harvestIter.hasNext()) {
-                    allHarvests.addLast(harvestIter.next());
-                }
+                siloHarvests.forEach( (Harvest harvest)-> allHarvests.addLast(harvest));
             }
         }
     }
