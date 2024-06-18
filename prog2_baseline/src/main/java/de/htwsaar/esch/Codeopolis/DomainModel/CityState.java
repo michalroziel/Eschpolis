@@ -1,6 +1,6 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
-import de.htwsaar.esch.Codeopolis.DomainModel.Storage.LinkedList;
+import de.htwsaar.esch.Codeopolis.utilities.LinkedList;
 import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 
 import java.io.Serializable;

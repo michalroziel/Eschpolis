@@ -1,6 +1,6 @@
 package de.htwsaar.esch.codeopolis.DomainModel.Storage;
 
-import de.htwsaar.esch.Codeopolis.DomainModel.Storage.LinkedList;
+import de.htwsaar.esch.Codeopolis.utilities.LinkedList;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

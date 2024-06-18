@@ -3,6 +3,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.GameConfig;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.Harvest;
+import de.htwsaar.esch.Codeopolis.utilities.LinkedList;
 
 import java.text.DecimalFormat;
 import java.util.Comparator;
@@ -278,12 +279,7 @@ public class Depot {
      * @return The total capacity of the storage system.
      */
     public int totalCapacity() {
-        int totalCapacity = 0;
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-        while (iter.hasNext()) {
-            totalCapacity += iter.next().getCapacity();
-        }
-        return totalCapacity;
+        return (int) silos.sum(silo -> (double)silo.getCapacity());
     }
 
     /**
@@ -312,50 +308,13 @@ public class Depot {
         // creating the local class
         class DepotVisualizer {
 
-            private StringBuilder builder = new StringBuilder();
-            private DecimalFormat df = new DecimalFormat("0.00");
 
-            private int index = 0;
+        }
 
-            // adding information to a silo
-            public void appendSiloInfo(Silo silo) {
-
-                builder.append("Silo ").append(index + 1).append(": ");
-
-                String grainName = (silo.getGrainType() != null) ? silo.getGrainType().toString() : "EMPTY";
-                builder.append(grainName).append("\n");
-
-                int fillLevel = silo.getFillLevel();
-                int capacity = silo.getCapacity();
-
-                double fillPercentage = (double) fillLevel / capacity * 100;
-                int fillBarLength = 20;
-
-                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
-                int emptyBars = fillBarLength - filledBars;
-
-                builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
-                builder.append("|");
-
-                for (int j = 0; j < filledBars; j++) {
-                    builder.append("=");
-                }
-
-                for (int j = 0; j < emptyBars; j++) {
-                    builder.append("-");
-                }
-
-                builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
-                builder.append("Capacity: ").append(capacity).append(" units\n\n");
-
-                index++;
-            }
-
-            // make a visual representation of the Depot
-            public String visualize() {
-                //simply return a string representation of the builder
-                return builder.toString();
-            }
+        // make a visual representation of the Depot
+        public String visualize() {
+            //simply return a string representation of the builder
+            return builder.toString();
         }
 
         silos.sort();

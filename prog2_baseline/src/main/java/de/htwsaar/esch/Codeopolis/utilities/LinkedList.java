@@ -1,4 +1,6 @@
-package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
+package de.htwsaar.esch.Codeopolis.utilities;
+
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 
 import java.util.Comparator;
 import java.util.NoSuchElementException;
