@@ -177,7 +177,8 @@ public class Depot {
      */
     public int takeOut(int amount, Game.GrainType grainType) {
         int takenAmount = 0;
-        //TODO: use filter() method       Predicate<Silo> pred = silo -> silo.getGrainType() == grainType;
+        //TODO: use filter() method
+        Predicate<Silo> pred = silo -> silo.getGrainType() == grainType;
         LinkedList<Silo> silosFilter = silos.filter(pred);
         LinkedList<Silo>.LinkedIterator<Silo> iter = silosFilter.makeIterator();
 
@@ -418,10 +419,11 @@ public class Depot {
         DepotVisualizer result = new DepotVisualizer();
 
         //iteratively append information to silo
-        for (int i = 0; i < silos.size(); i++) {
+        //for (int i = 0; i < silos.size(); i++) {
+        //  result.appendSiloInfo(silos.get(i));
+        //}
 
-            result.appendSiloInfo(silos.get(i));
-        }
+        this.silos.forEach(result::appendSiloInfo);
 
 
         // Rückgabe der String-Repräsentation des Depots
@@ -502,15 +504,17 @@ public class Depot {
         silos.sort(givenComparator);
         //From exercise sheet 3
         DepotVisualizer result = new DepotVisualizer();
+        LinkedList<Silo> filteredSilos = this.silos.filter(givenPredicate);
+        filteredSilos.sort(givenComparator);
+        filteredSilos.forEach(result::appendSiloInfo);
+        //LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
 
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-
-        while (iter.hasNext()) {
-            Silo temp = iter.next();
-            if (givenPredicate.test(temp)) {
-                result.appendSiloInfo(temp);
-            }
-        }
+        //while (iter.hasNext()) {
+         //   Silo temp = iter.next();
+           // if (givenPredicate.test(temp)) {
+            //    result.appendSiloInfo(temp);
+            //}
+        //}
         // Rückgabe der String-Repräsentation des Depots
         return result.visualize();
     }
@@ -519,7 +523,6 @@ public class Depot {
 
         private Game.GrainType iteratorGrainType;
 
-        //TODO: does it make sense to set it to -1 ?
         private int currentIndex = -1;
         private int temp;
 
@@ -542,9 +545,7 @@ public class Depot {
         @Override
         public Silo.Status next() {
             // if the next Silo is available and has the same GrainType
-            //TODO: do we really need the if case?
             if (hasNext()) {
-                //TODO: return new Silo status
                 currentIndex = temp;
                 return silos.get(currentIndex).getStatus();
             } else {
