@@ -6,6 +6,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Plants.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Depot;
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
 
 /**
@@ -411,6 +412,11 @@ public class City extends GameEntity {
 	    this.depot.store(Harvest.createHarvest(Game.GrainType.RYE, 100000, this.year)); 
 	    this.depot.store(Harvest.createHarvest(Game.GrainType.WHEAT, 100000, this.year));
 	    this.acres = 1000000;
+	}
+
+	public String getDepotInfo(Comparator givenComparator, Predicate givenPredicate) {
+		return this.depot.toString(givenPredicate, givenComparator);
+
 	}
 
 }

@@ -79,7 +79,7 @@ public class DepotDetailsDialog {
                 String grainTypeInput = scanner.nextLine().toUpperCase();
                 try {
                     GrainType grainType = GrainType.valueOf(grainTypeInput);
-                    return ...
+                    return (Silo silo) -> silo.getGrainType() == grainType;
                 } catch (IllegalArgumentException e) {
                     System.out.println("Invalid grain type. No filter will be applied.");
                     return null;
@@ -87,7 +87,7 @@ public class DepotDetailsDialog {
             case 2:
                 System.out.println("Enter the minimum fill level:");
                 int minFillLevel = Integer.parseInt(scanner.nextLine());
-                return ...
+                return (Silo silo) -> silo.getFillLevel() >= minFillLevel;
             case 3:
                 System.out.println("Enter the maximum fill level:");
                 int maxFillLevel = Integer.parseInt(scanner.nextLine());
@@ -117,13 +117,13 @@ public class DepotDetailsDialog {
 
         switch (choice) {
             case 1:
-                return ...
+                return null;
             case 2:
                 return ...
             case 3:
                 return ...
             case 4:
-                return ...
+                return null;
             case 5:
                 return null;
             default:
