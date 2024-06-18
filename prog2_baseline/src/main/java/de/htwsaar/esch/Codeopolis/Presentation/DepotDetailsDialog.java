@@ -1,10 +1,11 @@
 package de.htwsaar.esch.Codeopolis.Presentation;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
-import de.htwsaar.esch.Codeopolis.DomainModel.Storage.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -17,6 +18,8 @@ public class DepotDetailsDialog {
     private Scanner scanner;
 
     private Game game;
+
+
 
     /**
      * Constructs a DepotDetailsDialog with the specified game.
@@ -46,9 +49,7 @@ public class DepotDetailsDialog {
                     System.out.println(game.getDepotDetails(null, null));
                     break; // Added break statement
                 case 2:
-                    ...getFilterCriteria();
-                    ...getComparatorCriteria();
-                    System.out.println(game.getDepotDetails(filter, comparator));
+                    System.out.println(game.getDepotDetails(getComparatorCriteria(),getFilterCriteria()));
                     break;
                 case 3:
                     System.out.println("Exiting...");
@@ -121,9 +122,22 @@ public class DepotDetailsDialog {
             case 2:
                 return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getFillLevel(), siloTwo.getFillLevel());
             case 3:
-                return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getCapacity(), siloTwo.getCapacity());     ;
+                return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getCapacity(), siloTwo.getCapacity());
             case 4:
-                return null;
+                return (Silo siloOne, Silo siloTwo) -> {
+
+                    Random myRandom = new Random();
+                    int randomValue = myRandom.nextInt(1, 11);
+
+
+                    if (randomValue <= 5) {
+                        return Integer.compare(siloOne.getFillLevel(), siloTwo.getFillLevel());
+                    } else {
+                        return Integer.compare(siloOne.getCapacity(), siloTwo.getCapacity());
+
+                    }
+
+                };
             case 5:
                 return null;
             default:

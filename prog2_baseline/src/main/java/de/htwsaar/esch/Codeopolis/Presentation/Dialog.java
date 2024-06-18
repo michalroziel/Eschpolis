@@ -24,6 +24,8 @@ public class Dialog extends UserInterface {
     private static final int MEDIUM = 2;
     private static final int HARD = 3;
 
+    private DepotDetailsDialog depotDetailsDialog;
+
     private Game currentGame;
 
     /**
@@ -32,7 +34,7 @@ public class Dialog extends UserInterface {
     public Dialog() {
         input = new Scanner(System.in);
         currentGame = null;
-
+        depotDetailsDialog = null;
     }
 
     /**
@@ -57,8 +59,7 @@ public class Dialog extends UserInterface {
                 System.out.println(e);
                 e.printStackTrace(System.out);
             }
-        }
-        while (funktion != END_PROGRAM);
+        } while (funktion != END_PROGRAM);
 
     }
 
@@ -144,7 +145,10 @@ public class Dialog extends UserInterface {
                 throw new UnsupportedOperationException("The selected difficulty level " + difficulty + " is not implemented.");
         }
         currentGame = new Game(java.util.UUID.randomUUID().toString(), cityName, newGameDifficulty, this); //Issue#11
+        depotDetailsDialog = new DepotDetailsDialog(currentGame);
         currentGame.startGame();
+
+
     }
 
     private void saveGame() {
@@ -191,16 +195,7 @@ public class Dialog extends UserInterface {
      */
     private void printState(CityState state) {
         System.out.println("--- Current State ---");
-        System.out.println("Bushels: " + state.getTotalAmountOfBushels() +
-                " (Barley: " + state.getBushels(Game.GrainType.BARLEY) +
-                ", Corn: " + state.getBushels(Game.GrainType.CORN) +
-                ", Millet: " + state.getBushels(Game.GrainType.MILLET) +
-                ", Rice: " + state.getBushels(Game.GrainType.RICE) +
-                ", Rye: " + state.getBushels(Game.GrainType.RYE) +
-                ", Wheat: " + state.getBushels(Game.GrainType.WHEAT) +
-                "), Acres: " + state.getAcres() +
-                ", Residents: " + state.getResidents() +
-                ", Free Storage: " + state.getFreeStorage());
+        System.out.println("Bushels: " + state.getTotalAmountOfBushels() + " (Barley: " + state.getBushels(Game.GrainType.BARLEY) + ", Corn: " + state.getBushels(Game.GrainType.CORN) + ", Millet: " + state.getBushels(Game.GrainType.MILLET) + ", Rice: " + state.getBushels(Game.GrainType.RICE) + ", Rye: " + state.getBushels(Game.GrainType.RYE) + ", Wheat: " + state.getBushels(Game.GrainType.WHEAT) + "), Acres: " + state.getAcres() + ", Residents: " + state.getResidents() + ", Free Storage: " + state.getFreeStorage());
     }
 
     /**
@@ -318,19 +313,20 @@ public class Dialog extends UserInterface {
         }
 
         System.out.println("Here is the detaild information on your depot:");
+        this.depotDetailsDialog.start();
         System.out.println(result.getDepotState());
 
         System.out.println("Press some key to start the new year. Enter SAVE to save the current game and continue. Enter QUIT to quit the current game. ");
         String in = "";
         try {
             in = input.next().trim();
+
         } catch (NoSuchElementException e) {
             System.out.println(e);
         } catch (IllegalStateException e) {
             System.out.println(e);
         }
-        if (in.equals("IDKFA"))
-            this.currentGame.IDKFA();
+        if (in.equals("IDKFA")) this.currentGame.IDKFA();
         if (in.equals("SAVE")) {
             this.saveGame();
             System.out.println("You did quit the game.");
