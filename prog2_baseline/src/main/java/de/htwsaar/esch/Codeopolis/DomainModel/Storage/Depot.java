@@ -7,6 +7,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.Harvest;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class Depot {
@@ -75,17 +76,8 @@ public class Depot {
      * @return The total amount of bushels stored in the depot.
      */
     public int getTotalFillLevel() {
-        int totalBushels = 0;
 
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-
-        while (iter.hasNext()) {
-            Silo currSilo = iter.next();
-            totalBushels += currSilo.getFillLevel();
-        }
-
-
-        return totalBushels;
+        return(int) silos.sum(silo -> (double)silo.getFillLevel());
     }
 
     /**
@@ -96,17 +88,9 @@ public class Depot {
      * @return The total capacity of the depot for the specified grain type.
      */
     public int getCapacity(Game.GrainType grainType) {
-        int totalCapacity = 0;
-        Iterator iterator = new DepotIterator(grainType);
 
-
-        // Add the capacity as long as there is another silo with the correct GrainType
-        while (iterator.hasNext()) {
-            Silo.Status currStatus = iterator.next();
-            totalCapacity += currStatus.getCapacity();
-        }
-
-        return totalCapacity;
+        return (int) silos.filter(silo -> silo.getGrainType() == grainType)
+                .sum(silo -> (double) silo.getCapacity());
     }
 
     /**
@@ -116,57 +100,32 @@ public class Depot {
      * @return True if the harvest was successfully stored, false otherwise.
      */
     public boolean store(Harvest harvest) {
-
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-        Harvest currHarvest = harvest;
-        Harvest finalCurrHarvest = currHarvest;
-        //TODO filter() benutzen
-        Predicate<Silo> pred = (Silo silo) -> silo.getGrainType() == finalCurrHarvest.getGrainType() || silo.getFillLevel() == 0;
-
+        Harvest finalHarvest = harvest;
+        LinkedList<Silo> silosFilter = silos.filter((Silo silo) -> silo.getGrainType() == finalHarvest.getGrainType() || silo.getFillLevel() == 0);
+        LinkedList<Silo>.LinkedIterator<Silo> iter = silosFilter.makeIterator();
         while (iter.hasNext()) {
             Silo currSilo = iter.next();
-
-            // if the predicate is satisfied
-            if (pred.test(currSilo)) {
-                currHarvest = currSilo.store(currHarvest);
-                if (currHarvest == null) {
-                    return true;
-                }
+            harvest = currSilo.store(harvest);
+            if (harvest == null) {
+                return true;
             }
-//            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
-//                harvest = currSilo.store(harvest);
-//                if (harvest == null) {
-//                    return true;
-//                }
-//            }
-
         }
-
         defragment();
 
-        iter = silos.makeIterator();
+        iter = silosFilter.makeIterator();
 
         while (iter.hasNext()) {
             Silo currSilo = iter.next();
-            // check if predicate is satisfied
-            if (pred.test(currSilo)) {
-                currHarvest = currSilo.store(currHarvest);
-                if (currHarvest == null) {
-                    return true;
-                }
-
+            harvest = currSilo.store(harvest);
+            if (harvest == null) {
+                return true;
             }
-//            if (currSilo.getGrainType() == harvest.getGrainType() || currSilo.getFillLevel() == 0) {
-//                harvest = currSilo.store(harvest);
-//                if (harvest == null) {
-//                    return true;
-//                }
-//            }
+        }
+             return false;
 
         }
 
-        return false;
-    }
+
 
     /**
      * Takes out a specified amount of grain from the depot for a specific grain type.
@@ -177,9 +136,7 @@ public class Depot {
      */
     public int takeOut(int amount, Game.GrainType grainType) {
         int takenAmount = 0;
-        //TODO: use filter() method
-        Predicate<Silo> pred = silo -> silo.getGrainType() == grainType;
-        LinkedList<Silo> silosFilter = silos.filter(pred);
+        LinkedList<Silo> silosFilter = silos.filter(silo -> silo.getGrainType() == grainType);
         LinkedList<Silo>.LinkedIterator<Silo> iter = silosFilter.makeIterator();
 
 
@@ -212,10 +169,6 @@ public class Depot {
 
             // we can do this because the forEach method has a check for hasNext()
             silos.forEach(silo -> silo.emptySilo());
-//            while (iter.hasNext()) {
-//                Silo currSilo = iter.next();
-//                currSilo.emptySilo();
-//            }
             return totalAmountOfBushels;
         }
 
@@ -268,12 +221,13 @@ public class Depot {
 
     /**
      * Performs defragmentation on the depot to redistribute grain across silos.
+     *
      */
     public void defragment() {
         LinkedList<Harvest> allHarvests = new LinkedList<>();
 
-        //this.silos.forEach(silo -> silo.emptySilo().forEach((Harvest harvest)-> allHarvests.addLast(harvest)));
-
+        this.silos.forEach(silo -> silo.emptySilo().filter(Objects::nonNull).forEach(allHarvests::addLast));
+/*
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
         while (iter.hasNext()) {
             Silo silo = iter.next();
@@ -282,6 +236,9 @@ public class Depot {
                 siloHarvests.forEach( (Harvest harvest)-> allHarvests.addLast(harvest));
             }
         }
+
+ */
+
     }
 
 
@@ -291,12 +248,7 @@ public class Depot {
      * @return The total count of harvests stored in all silos combined.
      */
     private int getTotalHarvestCount() {
-        int totalCount = 0;
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-        while (iter.hasNext()) {
-            totalCount += iter.next().getHarvestCount();
-        }
-        return totalCount;
+        return (int )silos.sum(  silo -> (double )silo.getHarvestCount() );
     }
 
 
@@ -306,15 +258,7 @@ public class Depot {
      * @return The total amount of grain that decayed in the depot.
      */
     public int decay(int currentYear) {
-        int totalDecayedAmount = 0;
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
-
-
-        // we can do this because the forEach method has a check for hasNext()
-        while (iter.hasNext()) {
-            totalDecayedAmount += iter.next().decay(currentYear);
-        }
-        return totalDecayedAmount;
+        return (int) silos.sum(silo -> (double)silo.decay(currentYear));
     }
 
 
