@@ -1,5 +1,6 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import java.util.Comparator;
 import java.util.Random;
 
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
@@ -251,6 +252,10 @@ public class Game extends GameEntity{
      */
 	private int getPricePerAcre() {
 		return fortune.nextInt(this.config.getMaxAcrePrice() - this.config.getMinArcrPrice()) + this.config.getMinArcrPrice();
+	}
+
+	public Comparator getComparatorCriteria() {
+		return null;
 	}
 	
 	/**
