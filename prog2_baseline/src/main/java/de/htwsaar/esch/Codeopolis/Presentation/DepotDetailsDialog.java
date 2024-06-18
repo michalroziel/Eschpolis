@@ -91,7 +91,7 @@ public class DepotDetailsDialog {
             case 3:
                 System.out.println("Enter the maximum fill level:");
                 int maxFillLevel = Integer.parseInt(scanner.nextLine());
-                return ...
+                return (Silo silo) -> silo.getFillLevel() <= maxFillLevel;
             case 4:
                 return null;
             default:
@@ -119,9 +119,9 @@ public class DepotDetailsDialog {
             case 1:
                 return null;
             case 2:
-                return ...
+                return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getFillLevel(), siloTwo.getFillLevel());
             case 3:
-                return ...
+                return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getCapacity(), siloTwo.getCapacity());     ;
             case 4:
                 return null;
             case 5:

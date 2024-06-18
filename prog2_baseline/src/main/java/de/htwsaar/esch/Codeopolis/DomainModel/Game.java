@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.function.Predicate;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
 
 /**
@@ -257,6 +258,11 @@ public class Game extends GameEntity{
 
 	public Comparator getComparatorCriteria() {
 		return null;
+	}
+	
+	
+	public String getDepotDetails( Comparator<Silo > givenComparator, Predicate<Silo> givenPredicate){
+		return this.city.getDepotInfo(givenComparator, givenPredicate);
 	}
 	
 	/**
