@@ -33,22 +33,7 @@ public class Depot {
      */
     public Depot(LinkedList<Silo> silosList) {   // probably used when a Game is loaded
         this.silos = new LinkedList<>();
-
-        LinkedList<Silo>.LinkedIterator<Silo> iter = silosList.makeIterator();
-
-        Predicate<Silo> myPredicate = (Silo mySilo) -> mySilo != null;
-
-        while (iter.hasNext()) {
-            silosList.addIf(myPredicate, iter.next());
-        }
-
-//        if (silosList == null) {
-//        } else {
-//            LinkedList<Silo>.LinkedIterator<Silo> iter = silosList.makeIterator();
-//            while (iter.hasNext()) {
-//                this.silos.addLast(iter.next());
-//            }
-//        }
+        silosList.forEach(this.silos::addLast);
     }
 
     /**
@@ -77,12 +62,11 @@ public class Depot {
      * @return A copy of the silos array.
      */
     public LinkedList<Silo> getSilos() {
-        // Create a new array of Silo with the same length as the original
-        Predicate<Silo> mypred = (Silo mySilo) -> mySilo != null;
-
-        LinkedList<Silo> silosCopy = silos.filter(mypred);
-        return silosCopy;
-
+        // Create a new LinkedList and fill it with copies of the Silo objects
+        LinkedList<Silo> copy = new LinkedList<>();
+        //using Method Reference
+        this.silos.forEach(copy::addLast);
+        return copy;
     }
 
     /**
@@ -136,6 +120,7 @@ public class Depot {
         LinkedList<Silo>.LinkedIterator<Silo> iter = silos.makeIterator();
         Harvest currHarvest = harvest;
         Harvest finalCurrHarvest = currHarvest;
+        //TODO filter() benutzen
         Predicate<Silo> pred = (Silo silo) -> silo.getGrainType() == finalCurrHarvest.getGrainType() || silo.getFillLevel() == 0;
 
         while (iter.hasNext()) {
@@ -192,8 +177,7 @@ public class Depot {
      */
     public int takeOut(int amount, Game.GrainType grainType) {
         int takenAmount = 0;
-
-        Predicate<Silo> pred = silo -> silo.getGrainType() == grainType;
+        //TODO: use filter() method       Predicate<Silo> pred = silo -> silo.getGrainType() == grainType;
         LinkedList<Silo> silosFilter = silos.filter(pred);
         LinkedList<Silo>.LinkedIterator<Silo> iter = silosFilter.makeIterator();
 

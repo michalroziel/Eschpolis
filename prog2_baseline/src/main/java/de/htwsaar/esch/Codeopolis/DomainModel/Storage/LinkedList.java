@@ -312,12 +312,13 @@ public class LinkedList<T extends Comparable> {
         }
 
     }
+
     /**
      * This method adds a new element to the end of the LinkedList if it satisfies a given condition.
      * The condition is specified by a Predicate, which is a functional interface that represents a boolean-valued function of one argument.
      * The method tests the new element with the Predicate, and if the Predicate returns true, the element is added to the LinkedList.
      *
-     * @param predicate The condition that the new element must satisfy in order to be added to the LinkedList.
+     * @param predicate  The condition that the new element must satisfy in order to be added to the LinkedList.
      * @param newElement The new element to be added to the LinkedList.
      */
     public void addIf(Predicate<? super T> predicate, T newElement) {
@@ -328,7 +329,8 @@ public class LinkedList<T extends Comparable> {
 
         }
     }
-    public double sum(Function<T,Double> givenFunction) {
+
+    public double sum(Function<T, Double> givenFunction) {
 
         LinkedIterator<T> myIterator = this.makeIterator();
         double finalSum = 0.0;
@@ -343,56 +345,17 @@ public class LinkedList<T extends Comparable> {
         return finalSum;
     }
 
-    public void sort(Comparator<? super T> comparator) {
-
-        if (size > 1) {
-            boolean wasChanged;
-
-            do {
-                Node<T> current = head;
-                Node<T> previous = null;
-                Node<T> next = current.next;
-                wasChanged = false;
-
-                while (next != null) {
-
-                    // compare if coompareTo yields 1 which means that the current is greater than the next
-
-                    // if (current.content.compareTo(next.content) > 0) {
-
-
-                    // TODO: now using the comparator !
-                    if (comparator.compare(current.content, next.content) > 0) {
-
-                        wasChanged = true;
-
-                        if (previous != null) {
-                            Node<T> sig = next.next;
-
-                            previous.next = next;
-                            next.next = current;
-                            current.next = sig;
-                        } else {
-                            Node<T> sig = next.next;
-
-                            head = next;
-                            next.next = current;
-                            current.next = sig;
-                        }
-
-                        previous = next;
-                        next = current.next;
-                    } else {
-                        previous = current;
-                        current = next;
-                        next = next.next;
-                    }
+    public void sort(Comparator<T> comparator) {
+        for (int i = this.size(); i > 0; i--) {
+            for (int j = 0; j < i - 1; j++) {
+                if (comparator.compare(this.get(j), this.get(j + 1)) == 1) {
+                    T temp = this.get(j);
+                    this.set(this.get(j + 1), j);
+                    this.set(temp, j + 1);
                 }
-            } while (wasChanged);
+            }
         }
 
 
     }
-
-
 }
