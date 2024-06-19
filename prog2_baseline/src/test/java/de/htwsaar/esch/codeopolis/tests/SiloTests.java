@@ -2,7 +2,7 @@ package de.htwsaar.esch.codeopolis.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.htwsaar.esch.Codeopolis.utilities.LinkedList;
+import de.htwsaar.esch.Codeopolis.DomainModel.Storage.LinkedList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

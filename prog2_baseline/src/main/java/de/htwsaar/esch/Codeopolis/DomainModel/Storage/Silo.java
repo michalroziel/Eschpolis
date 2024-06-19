@@ -2,7 +2,6 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Storage;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
-import de.htwsaar.esch.Codeopolis.utilities.LinkedList;
 
 import java.io.Serializable;
 
