@@ -118,7 +118,7 @@ public class DepotDetailsDialog {
 
         switch (choice) {
             case 1:
-                return null;
+                return (Silo siloOne, Silo siloTwo)-> siloOne.getGrainType().compareTo(siloTwo.getGrainType());
             case 2:
                 return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getFillLevel(), siloTwo.getFillLevel());
             case 3:
