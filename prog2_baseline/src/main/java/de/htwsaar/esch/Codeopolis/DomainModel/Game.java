@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.function.Predicate;
 
-import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
 
 /**
@@ -14,7 +13,7 @@ public class Game extends GameEntity{
 	/**
      * The Difficulty enum represents the difficulty level of the game.
      */
-    public enum Difficulty {EASY, MEDIUM, HARD};
+    public enum Difficulty {EASY, MEDIUM, HARD}
     
     /**
      * The {@code GrainType} enum represents different types of grains managed within the game.
@@ -53,7 +52,7 @@ public class Game extends GameEntity{
     /**
      * The GameState enum represents the game states.
      */
-    private enum GameState {PREPARED, RUNNING, GAMEOVER};
+    private enum GameState {PREPARED, RUNNING, GAMEOVER}
     
     private GameState state;
 	private City city;
@@ -82,8 +81,8 @@ public class Game extends GameEntity{
      * Constructs a Game object with the specified city state.
      *
      * @param id         the ID of the game
-     * @param name       the name of the game
-     * @param difficulty the difficulty level of the game
+     * @param cityState  the state of the game
+     * @param gameConfig the config of the game
      * @param ui         the user interface for the game
      */
 	public Game(String id, CityState cityState, GameConfig gameConfig, UserInterface ui){
@@ -94,32 +93,33 @@ public class Game extends GameEntity{
 		this.fortune = new Random();
 		this.state = GameState.PREPARED;
 	}
-	
+
 	/**
-     * Starts the game and enters the game loop until the game is over.
-     */
+	 * Starts the game by setting the game state to RUNNING and initiating the game loop.
+	 */
 	public void startGame() {
 		this.state = GameState.RUNNING;
-		//while(this.state != GameState.GAMEOVER)
-			gameLoop();
+		gameLoop();
 	}
-	
+
 	/**
-     * Executes a single iteration of the game loop.
-     */
+	 * Recursively executes the game loop until the game reaches a GAMEOVER state.
+	 * During each recursion, it executes core game functions such as expanding the depot, buying, selling,
+	 * feeding, and planting. After executing these functions, it checks for end conditions including
+	 * city extinction or overwhelming starvation which may lead to game over scenarios.
+	 * If none of these conditions are met and the game is not won, it recursively calls itself to continue the game loop.
+	 */
 	private void gameLoop() {
-
-		if (this.state == GameState.GAMEOVER){
-			return ;
+		if(this.state == GameState.GAMEOVER) {
+			return; // Ends the recursion when the game is over
 		}
-
 
 		expandDepot();
 		buy();
 		sell();
 		feed();
 		plant();
-		TurnResult resultOfLastTurn = runturn();
+		City.TurnResult resultOfLastTurn = runturn();
 		if(this.city.cityExtinct())
 		{
 			ui.gameLost("All of your city's residents have starved to death. What a shame. You have ruined the once prosperous city of "+this.city.getState().getName()+".");
@@ -134,7 +134,10 @@ public class Game extends GameEntity{
 			this.state = GameState.GAMEOVER;
 		}
 
-		gameLoop();
+		// Recursive call to gameLoop
+		if (this.state != GameState.GAMEOVER) {
+			gameLoop();
+		}
 	}
 	
 	/**
@@ -143,7 +146,7 @@ public class Game extends GameEntity{
      * @param resultOfLastTurn the result of the last turn
      * @return true if more than 50% of residents starved, false otherwise
      */
-	private boolean tooManyStarved(TurnResult resultOfLastTurn) {
+	private boolean tooManyStarved(City.TurnResult resultOfLastTurn) {
 		if(resultOfLastTurn.getStarvedPercentage() > 50)
 			return true;
 		return false;
@@ -154,8 +157,8 @@ public class Game extends GameEntity{
      *
      * @return the result of the turn
      */
-	private TurnResult runturn() {
-		TurnResult result = this.city.runTurn();
+	private City.TurnResult runturn() {
+		City.TurnResult result = this.city.runTurn();
 		this.ui.turnEnd(result);
 		return result;
 	}
@@ -169,7 +172,7 @@ public class Game extends GameEntity{
 	        	this.city.plant(ui.plant(this.config.getBushelsPerAcre(), this.config.getAcrePerResident(), this.city.getState()));
 	            return;
 	        } catch (InsufficientResourcesException e) {
-	            String errorMessage = "Unable to plant crops: " + e.getMessage() + ". You need " + e.getRequired() + " bushels, but only have " + e.getAvailable() + " available.";;
+	            String errorMessage = "Unable to plant crops: " + e.getMessage() + ". You need " + e.getRequired() + " bushels, but only have " + e.getAvailable() + " available.";
 	            this.ui.illigleInput(errorMessage);
 	        } catch (LandOperationException e) {
 	            String errorMessage = "Unable to plant crops: " + e.getMessage();
@@ -208,7 +211,12 @@ public class Game extends GameEntity{
      * Allows the player to expand the depot.
      */
 	private void expandDepot() {
-		this.city.expandDepot(ui.expandDepot(this.city.getState()), this.config.getSiloCapacity());
+		int numberOfNewSilos = ui.expandDepot(this.city.getState());
+
+		while(!this.city.expandDepot(numberOfNewSilos, this.config.getSiloCapacity())) {
+			this.ui.illigleInput("You can not afford this silo expansion. An extension of "+numberOfNewSilos+" silos costs " + numberOfNewSilos * this.config.getSiloCapacity() * GameConfig.DEPOT_EXPANSION_COST + " bushels.");
+			numberOfNewSilos = ui.expandDepot(this.city.getState());
+		}
 	}
 	
 	/**
@@ -255,15 +263,6 @@ public class Game extends GameEntity{
 	private int getPricePerAcre() {
 		return fortune.nextInt(this.config.getMaxAcrePrice() - this.config.getMinArcrPrice()) + this.config.getMinArcrPrice();
 	}
-
-	public Comparator getComparatorCriteria() {
-		return null;
-	}
-	
-	
-	public String getDepotDetails( Comparator<Silo > givenComparator, Predicate<Silo> givenPredicate){
-		return this.city.getDepotInfo(givenComparator, givenPredicate);
-	}
 	
 	/**
      * Returns the game configuration.
@@ -300,5 +299,16 @@ public class Game extends GameEntity{
      */
 	public void quitGame() {
 		this.state = GameState.GAMEOVER;
+	}
+
+	/**
+	 * Retrieves the depot details based on the provided filter and comparator.
+	 *
+	 * @param filter The predicate to filter silos (can be null if no filtering is needed).
+	 * @param comparator The comparator to sort silos (can be null if no sorting is needed).
+	 * @return A string representation of the silos in the depot.
+	 */
+	public String getDepotDetails(Predicate<Silo> filter, Comparator<Silo> comparator) {
+		return this.city.getDepotDetails(filter, comparator);
 	}
 }

@@ -1,11 +1,10 @@
 package de.htwsaar.esch.Codeopolis.Presentation;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
+import de.htwsaar.esch.Codeopolis.DomainModel.Silo;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
-import de.htwsaar.esch.Codeopolis.DomainModel.Storage.Silo;
 
 import java.util.Comparator;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -18,8 +17,6 @@ public class DepotDetailsDialog {
     private Scanner scanner;
 
     private Game game;
-
-
 
     /**
      * Constructs a DepotDetailsDialog with the specified game.
@@ -49,7 +46,9 @@ public class DepotDetailsDialog {
                     System.out.println(game.getDepotDetails(null, null));
                     break; // Added break statement
                 case 2:
-                    System.out.println(game.getDepotDetails(getComparatorCriteria(),getFilterCriteria()));
+                    Predicate<Silo> filter = getFilterCriteria();
+                    Comparator<Silo> comparator = getComparatorCriteria();
+                    System.out.println(game.getDepotDetails(filter, comparator));
                     break;
                 case 3:
                     System.out.println("Exiting...");
@@ -80,7 +79,7 @@ public class DepotDetailsDialog {
                 String grainTypeInput = scanner.nextLine().toUpperCase();
                 try {
                     GrainType grainType = GrainType.valueOf(grainTypeInput);
-                    return (Silo silo) -> silo.getGrainType() == grainType;
+                    return silo -> silo.getGrainType() != null && silo.getGrainType() == grainType;
                 } catch (IllegalArgumentException e) {
                     System.out.println("Invalid grain type. No filter will be applied.");
                     return null;
@@ -88,11 +87,11 @@ public class DepotDetailsDialog {
             case 2:
                 System.out.println("Enter the minimum fill level:");
                 int minFillLevel = Integer.parseInt(scanner.nextLine());
-                return (Silo silo) -> silo.getFillLevel() >= minFillLevel;
+                return silo -> silo.getFillLevel() >= minFillLevel;
             case 3:
                 System.out.println("Enter the maximum fill level:");
                 int maxFillLevel = Integer.parseInt(scanner.nextLine());
-                return (Silo silo) -> silo.getFillLevel() <= maxFillLevel;
+                return silo -> silo.getFillLevel() <= maxFillLevel;
             case 4:
                 return null;
             default:
@@ -118,26 +117,18 @@ public class DepotDetailsDialog {
 
         switch (choice) {
             case 1:
-                return (Silo siloOne, Silo siloTwo)-> siloOne.getGrainType().compareTo(siloTwo.getGrainType());
-            case 2:
-                return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getFillLevel(), siloTwo.getFillLevel());
-            case 3:
-                return (Silo siloOne, Silo siloTwo) -> Integer.compare(siloOne.getCapacity(), siloTwo.getCapacity());
-            case 4:
-                return (Silo siloOne, Silo siloTwo) -> {
-
-                    Random myRandom = new Random();
-                    int randomValue = myRandom.nextInt(1, 11);
-
-
-                    if (randomValue <= 5) {
-                        return Integer.compare(siloOne.getFillLevel(), siloTwo.getFillLevel());
-                    } else {
-                        return Integer.compare(siloOne.getCapacity(), siloTwo.getCapacity());
-
-                    }
-
+                return (s1, s2) -> {
+                    if (s1.getGrainType() == null && s2.getGrainType() == null) return 0;
+                    if (s1.getGrainType() == null) return -1;
+                    if (s2.getGrainType() == null) return 1;
+                    return s1.getGrainType().compareTo(s2.getGrainType());
                 };
+            case 2:
+                return (s1, s2) -> Integer.compare(s1.getFillLevel(), s2.getFillLevel());
+            case 3:
+                return (s1, s2) -> Integer.compare(s1.getCapacity(), s2.getCapacity());
+            case 4:
+                return (s1, s2) -> Math.random() > 0.5 ? 1 : -1; // Random sorting
             case 5:
                 return null;
             default:
