@@ -19,7 +19,7 @@ public class RyeHarvest extends Harvest implements Serializable{
      * @param year The year in which the harvest occurred.
      */
 	protected RyeHarvest(int bushels, int year) {
-        super(bushels, year);
+        super(bushels, year,0.02f);
     }
 
     

@@ -20,7 +20,7 @@ public class CornHarvest extends Harvest implements Serializable{
      * @param year The year in which the harvest occurred.
      */
 	protected CornHarvest(int bushels, int year) {
-        super(bushels, year);
+        super(bushels, year,0.02f);
     }
     
 

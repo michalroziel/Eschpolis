@@ -13,11 +13,17 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 public abstract class Harvest implements Serializable,Comparable<Harvest>{
     private int bushels;
     private int year;
+    private final float durability;
 
 
-    protected Harvest(int bushels, int year) {
+    protected Harvest(int bushels, int year, float durability) {
         this.bushels = bushels;
         this.year = year;
+        this.durability = durability;
+    }
+
+    public float getDurability() {
+        return durability;
     }
 
     @Override
